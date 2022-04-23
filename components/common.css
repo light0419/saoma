@@ -1,0 +1,11 @@
+.flx{display: flex;align-items: center;justify-content: space-between;}
+.flxCenter{display: flex;align-items: center;}
+text{
+	display: block;
+}
+
+.storageform .listItem input{
+	color: #666;
+	font-size: 28rpx;
+	text-align: right;
+}

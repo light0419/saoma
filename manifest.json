@@ -1,0 +1,98 @@
+{
+    "name" : "facilityApp",
+    "appid" : "__UNI__C05E43C",
+    "description" : "",
+    "versionName" : "1.0.0",
+    "versionCode" : "100",
+    "transformPx" : false,
+    /* 5+App特有相关 */
+    "app-plus" : {
+        "compatible" : {
+            "ignoreVersion" : true
+        },
+        "usingComponents" : true,
+        "nvueStyleCompiler" : "uni-app",
+        "compilerVersion" : 3,
+        "splashscreen" : {
+            "alwaysShowBeforeRender" : true,
+            "waiting" : true,
+            "autoclose" : true,
+            "delay" : 0
+        },
+        /* 模块配置 */
+        "modules" : {},
+        /* 应用发布信息 */
+        "distribute" : {
+            /* android打包配置 */
+            "android" : {
+                "permissions" : [
+                    "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+                    "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+                    "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+                    "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
+                ]
+            },
+            /* ios打包配置 */
+            "ios" : {},
+            /* SDK配置 */
+            "sdkConfigs" : {
+                "ad" : {}
+            }
+        },
+        "nativePlugins" : {
+            "yy-scanbarcode" : {
+                "__plugin_info__" : {
+                    "name" : "二维码扫码 条形码 自定义持续扫描功能 仿PDA扫码功能 - [试用版，仅用于自定义调试基座]",
+                    "description" : "二维码 条形码 原生插件持续扫码功能集成，支持反复扫码，支持清除数据缓存，开关灯类似于扫码枪一直扫描",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=1479",
+                    "android_package_name" : "",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 0,
+                    "pid" : "1479",
+                    "parameters" : {}
+                }
+            }
+        }
+    },
+    /* 快应用特有相关 */
+    "quickapp" : {},
+    /* 小程序特有相关 */
+    "mp-weixin" : {
+        "appid" : "",
+        "setting" : {
+            "urlCheck" : false
+        },
+        "usingComponents" : true
+    },
+    "mp-alipay" : {
+        "usingComponents" : true
+    },
+    "mp-baidu" : {
+        "usingComponents" : true
+    },
+    "mp-toutiao" : {
+        "usingComponents" : true
+    },
+    "uniStatistics" : {
+        "enable" : false
+    },
+    "vueVersion" : "2",
+    "h5" : {
+        "router" : {
+            "mode" : "history"
+        }
+    }
+}
