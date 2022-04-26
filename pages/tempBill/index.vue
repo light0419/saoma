@@ -7,7 +7,38 @@
 			<input type="text" class="inp1 fl" v-model="searchTxt" placeholder="请输入用户名" placeholder-style="color: #999999;font-size: 28rpx;" />
 			<button class="btn1 fr" @click="search">搜索</button>
 		</view>
-		<view class="main">
+		<view class="main" v-if="pageType=='in'">
+			<view class="item bg1" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
+				<view class="item_top fix">
+					<view class="num fl">{{item.name}}</view>
+					<view class="note fr">待入库</view>
+				</view>
+				<view class="item_bot">
+					<view class="item1 fix">
+						<view class="name fl">接收人</view>
+						<view class="cont fr">{{item.tabremark}}</view>
+					</view>
+					<view class="item1 fix">
+						<view class="name fl">来源</view>
+						<view class="cont fr">{{item.source}}</view>
+					</view>
+					<view class="item1 fix">
+						<view class="name fl">上级单位</view>
+						<view class="cont fr">{{item.sysOrgCode}}</view>
+					</view>
+					<view class="item1 fix">
+						<view class="name fl">使用单位</view>
+						<view class="cont fr">{{item.projectdepartment}}</view>
+					</view>
+					<view class="item1 fix">
+						<view class="name fl">检验单编号</view>
+						<view class="cont fr">{{item.checkname}}</view>
+					</view>
+				</view>
+			</view>
+			
+		</view>
+		<view class="main" v-if="pageType=='out'">
 			<view class="item">
 				<view class="item_top fix">
 					<view class="num fl">202203211909516981</view>
@@ -28,66 +59,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="item">
-				<view class="item_top fix">
-					<view class="num fl">202203211909516981</view>
-					<view class="note fr">待出库</view>
-				</view>
-				<view class="item_bot">
-					<view class="item1 fix">
-						<view class="name fl">上级单位</view>
-						<view class="cont fr">昔榆公司</view>
-					</view>
-					<view class="item1 fix">
-						<view class="name fl">使用单位</view>
-						<view class="cont fr">昔榆一分部</view>
-					</view>
-					<view class="item1 fix">
-						<view class="name fl">检验单编号</view>
-						<view class="cont fr">202204061729394144</view>
-					</view>
-				</view>
-			</view>
-			<view class="item">
-				<view class="item_top fix">
-					<view class="num fl">202203211909516981</view>
-					<view class="note fr">待出库</view>
-				</view>
-				<view class="item_bot">
-					<view class="item1 fix">
-						<view class="name fl">上级单位</view>
-						<view class="cont fr">昔榆公司</view>
-					</view>
-					<view class="item1 fix">
-						<view class="name fl">使用单位</view>
-						<view class="cont fr">昔榆一分部</view>
-					</view>
-					<view class="item1 fix">
-						<view class="name fl">检验单编号</view>
-						<view class="cont fr">202204061729394144</view>
-					</view>
-				</view>
-			</view>
-			<view class="item">
-				<view class="item_top fix">
-					<view class="num fl">202203211909516981</view>
-					<view class="note fr">待出库</view>
-				</view>
-				<view class="item_bot">
-					<view class="item1 fix">
-						<view class="name fl">上级单位</view>
-						<view class="cont fr">昔榆公司</view>
-					</view>
-					<view class="item1 fix">
-						<view class="name fl">使用单位</view>
-						<view class="cont fr">昔榆一分部</view>
-					</view>
-					<view class="item1 fix">
-						<view class="name fl">检验单编号</view>
-						<view class="cont fr">202204061729394144</view>
-					</view>
-				</view>
-			</view>
+			
 		</view>
 	</view>
 </template>
@@ -97,10 +69,36 @@
 		data() {
 			return {
 				searchTxt:'',
+				pageType:'',
+				dataList:[]
 			}
 		},
-		onLoad() {
-
+		onLoad(options) {
+			if(options.type=='in'){
+				this.pageType="in"
+				uni.setNavigationBarTitle({
+				  title: '待入库单'   //页面标题为路由参数
+				})
+				this.$api.getOutBillData().then(res => {
+					console.log(res)
+					if(res.code==200){
+						this.dataList=res.result.records
+						console.log(res.result.records)
+						this.setData({
+							dataList:res.result.records
+						})
+					}
+				   // 获得数据 
+				}).catch(res => {
+				　　// 失败进行的操作
+				})
+			}
+			if(options.type=='out'){
+				this.pageType="out"
+				uni.setNavigationBarTitle({
+				  title: '待出库单'   //页面标题为路由参数
+				})
+			}
 		},
 		methods: {
 			scancodestorage: function() {
@@ -153,12 +151,17 @@
 		.item{
 			width:726rpx;
 			height:323rpx;
-			background: url(@/static/kuang1.png) no-repeat center center;
+			background: url(@/static/kuang2.png) no-repeat center center;
 			background-size:726rpx 323rpx;
 			padding:10rpx 35rpx;
 			margin-left: auto;
 			margin-right: auto;
 			margin-top: 5rpx;
+			&.bg1{
+				height:427rpx;
+				background: url(@/static/kuang1.png) no-repeat center center;
+				background-size:726rpx 427rpx;
+			}
 			.item_top{
 				height:100rpx;
 				padding-top: 30rpx;

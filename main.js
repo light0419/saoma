@@ -5,6 +5,16 @@ Vue.prototype.app = $app
 
 // #ifndef VUE3
 import Vue from 'vue'
+
+import request from './common/request.js'
+import api from './api/index.js'
+import url from './common/config.js'
+
+// Vue.config.productionTip = false
+Vue.prototype.$request = request
+Vue.prototype.$api = api
+Vue.prototype.$url = url
+
 Vue.config.productionTip = false
 App.mpType = 'app'
 

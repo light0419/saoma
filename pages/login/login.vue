@@ -97,6 +97,7 @@
 								//设置缓存
 								let userinfo = res.data.result.userInfo
 								uni.setStorageSync('userinfo',userinfo);
+								uni.setStorageSync('token',res.data.result.token);
 								// console.log(userinfo)
 								uni.switchTab({
 									url:"../index/index"

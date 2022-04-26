@@ -3,11 +3,11 @@
 		<view class="banner"></view>
 		<view class="in-out-box">
 			<view class="qrcodebox">
-				<view class="qrcode-fl" @click="scancodestorage">
+				<view class="qrcode-fl" @click="toScancodeIn">
 					<image src="../../static/rk@2x.png" mode=""></image>
 					<text>扫码入库</text>
 				</view>
-				<view class="qrcode-fl">
+				<view class="qrcode-fl" @click="toScancodeOut">
 					<image src="../../static/ckj@2x.png" mode=""></image>
 					<text>扫码出库</text>
 				</view>
@@ -90,9 +90,14 @@
 
 		},
 		methods: {
-			scancodestorage: function() {
+			toScancodeIn: function() {
 				uni.navigateTo({
-					url:"../sweepCodeStorage/sweepCodeStorage"
+					url:"../tempBill/index?type=in"
+				})
+			},
+			toScancodeOut: function() {
+				uni.navigateTo({
+					url:"../tempBill/index?type=out"
 				})
 			}
 		}

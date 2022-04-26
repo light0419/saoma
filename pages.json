@@ -1,5 +1,27 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	{
+		"path": "pages/login/login",
+		"style": {
+			"navigationBarTitleText": "登录"
+			
+		}
+	},
+	{
+		"path": "pages/index/index",
+		"style": {
+			"navigationBarTitleText": "首页"
+			
+		}
+	},	
+	// {
+	// 	"path": "pages/sweepCodeStorage/storageform",
+	// 	"style": {
+	// 		"navigationBarTitleText": "入库表单"
+	// 	}
+	// },
+	
+	
 		{
 			"path": "pages/tempEquipmentBill/index",
 			"style": {
@@ -14,34 +36,9 @@
 				
 			}
 		},	
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "首页"
-				
-			}
-		},	
-		{
-			"path": "pages/sweepCodeStorage/sweepCodeStorage",
-			"style": {
-				"navigationBarTitleText": "扫码入库",
-				"navigationBarTextStyle":"white",
-				"navigationBarBackgroundColor":"#016BA9"
-			}
-		},
-		{
-			"path": "pages/sweepCodeStorage/storageform",
-			"style": {
-				"navigationBarTitleText": "入库表单"
-			}
-		},
-		{
-			"path": "pages/login/login",
-			"style": {
-				"navigationBarTitleText": "登录"
-				
-			}
-		},
+		
+		
+		
 		{
 			"path": "pages/my/my",
 			"style": {
@@ -51,10 +48,11 @@
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "#fff",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "太理晨曦文创店",
 		"navigationBarBackgroundColor": "#016ba9",
 		"backgroundColor": "#F8F8F8"
+		
 	},
 	"tabBar":{
 		"color":"#999999",
