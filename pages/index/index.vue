@@ -14,14 +14,7 @@
 				<view class="centerline"></view>
 			</view>
 			<view class="inOutForeModel">
-				<view class="inoutItem">
-					<image src="../../static/srkd@2x.png" mode=""></image>
-					<text>待入库单</text>
-				</view>
-				<view class="inoutItem">
-					<image src="../../static/dckd@2x.png" mode=""></image>
-					<text>待出库单</text>
-				</view>
+				
 				<view class="inoutItem">
 					<image src="../../static/rkgl@2x.png" mode=""></image>
 					<text>入库管理</text>
@@ -29,6 +22,14 @@
 				<view class="inoutItem">
 					<image src="../../static/ckgl@2x.png" mode=""></image>
 					<text>出库管理</text>
+				</view>
+				<view class="inoutItem"  @click="toInCheck">
+					<image src="../../static/srkd@2x.png" mode=""></image>
+					<text>待入库检验</text>
+				</view>
+				<view class="inoutItem" @click="toOutCheck">
+					<image src="../../static/dckd@2x.png" mode=""></image>
+					<text>待出库检验</text>
 				</view>
 			</view>
 		</view>
@@ -99,7 +100,17 @@
 				uni.navigateTo({
 					url:"../tempBill/index?type=out"
 				})
-			}
+			},
+			toInCheck: function() {
+				uni.navigateTo({
+					url:"../tempBill/index?type=incheck"
+				})
+			},
+			toOutCheck: function() {
+				uni.navigateTo({
+					url:"../tempBill/index?type=outcheck"
+				})
+			},
 		}
 	}
 </script>

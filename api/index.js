@@ -13,5 +13,23 @@ console.log(request,'sss')
 
 
 //获取待入库单列表
-api.getOutBillData = params => request.globalRequest('/jeecg-boot/storageinformation/storageInformation/listbystatus', 'GET', params)
+api.getInBillData = params => request.globalRequest('/jeecg-boot/storageinformation/storageInformation/listbystatus', 'GET', params)
+
+//获取待出库单列表
+api.getOutBillData = params => request.globalRequest('/jeecg-boot/stockremovalinformation/stockRemovalInformation/listbystatus', 'GET', params)
+
+//获取待入库检验单列表
+api.getInCheeckBillData = params => request.globalRequest('/jeecg-boot/checkoutinformation/checkoutInformation/listbystatus', 'GET', params)
+
+
+//获取待出库检验单列表
+api.getOutCheeckBillData = params => request.globalRequest('/jeecg-boot/checkoutinformation/checkoutInformation/listbystatus', 'GET', params)
+
+
+
+
+
+
+
+
 export default api
