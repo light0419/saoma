@@ -17,7 +17,7 @@
 </template>
 
 <script>
-	// import { onReady } from '@dcloudio/uni-app'
+	import { onReady } from '@dcloudio/uni-app'
 	
 	let webView = null // webview容器
 	let barcode = null // 扫码框

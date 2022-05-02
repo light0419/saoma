@@ -69,6 +69,37 @@
 			},
 			login(){
 				var that = this
+				let loginParams = {
+					username: that.username||'admin',
+					password: that.password||'123456',
+					captcha: that.inputCode,
+					checkKey: that.currdatetime,
+					remember_me: false,
+				}
+				uni.request({
+					url: that.app.apiHost + "sys/login",
+					method:"POST",
+					data:loginParams,
+					success:function(res){
+						if(res.data.success){
+							//设置缓存
+							let userinfo = res.data.result.userInfo
+							uni.setStorageSync('userinfo',userinfo);
+							uni.setStorageSync('token',res.data.result.token);
+							// console.log(userinfo)
+							uni.switchTab({
+								url:"../index/index"
+							})
+						}else{
+							uni.showToast({
+								title:res.data.message,
+								icon:"none"
+							})
+							that.requestCodeSuccess=false
+						}
+					},
+					
+				})
 				if(that.username == ""){
 					uni.showToast({
 						title:"请输入用户名！",

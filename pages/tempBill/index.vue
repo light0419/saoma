@@ -7,10 +7,26 @@
 			<input type="text" class="inp1 fl" v-model="searchTxt" placeholder="请输入用户名" placeholder-style="color: #999999;font-size: 28rpx;" />
 			<button class="btn1 fr" @click="search">搜索</button>
 		</view>
+		
 		<scroll-view scroll-y="true" class="scrollview"  lower-threshold = 100 @scrolltolower='onScrollToLower' :refresher-enabled='true' refresher-background='#F6F6FC' :refresher-triggered='isRefreshing' @refresherpulling='onRefresherPulling'>
-			
+			<!-- <view >
+				 <picker-view v-if="visible" :indicator-style="indicatorStyle" :value="value" @change="bindChange" class="picker-view">
+				            <picker-view-column>
+				                <view class="item" v-for="(item,index) in years" :key="index">{{item}}年</view>
+				            </picker-view-column>
+				            <picker-view-column>
+				                <view class="item" v-for="(item,index) in months" :key="index">{{item}}月</view>
+				            </picker-view-column>
+				            <picker-view-column>
+				                <view class="item" v-for="(item,index) in days" :key="index">{{item}}日</view>
+				            </picker-view-column>
+							<picker-view-column>
+							    <view class="item" v-for="(item,index) in days1" :key="index">{{item}}日</view>
+							</picker-view-column>
+				        </picker-view>
+			</view> -->
 			<view class="main" v-if="pageType=='in'">
-				<view class="item bg1" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
+				<view class="item bg1" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
 					<view class="item_top fix">
 						<view class="num fl">{{item.name}}</view>
 						<view class="note fr">待入库</view>
@@ -41,7 +57,7 @@
 				
 			</view>
 			<view class="main" v-if="pageType=='out'">
-				<view class="item bg2" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
+				<view class="item bg2" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
 					<view class="item_top fix">
 						<view class="num fl">{{item.name}}</view>
 						<view class="note fr">待出库</view>
@@ -64,15 +80,15 @@
 				
 			</view>
 			<view class="main" v-if="pageType=='incheck'">
-				<view class="item bg3" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
+				<view class="item bg3" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
 					<view class="item_top fix">
 						<view class="num fl">{{item.name}}</view>
-						<view class="note fr">部分检验</view>
+						<view class="note fr">待检验</view>
 					</view>
 					<view class="item_bot">
 						<view class="item1 fix">
 							<view class="name fl">检验类型</view>
-							<view class="cont fr">{{item.tabremark}}</view>
+							<view class="cont fr">{{item.type_dictText}}</view>
 						</view>
 						<view class="item1 fix">
 							<view class="name fl">上级单位</view>
@@ -82,16 +98,12 @@
 							<view class="name fl">使用单位</view>
 							<view class="cont fr">{{item.projectdepartment}}</view>
 						</view>
-						<view class="item1 fix">
-							<view class="name fl">检验时间</view>
-							<view class="cont fr">{{item.checkname}}</view>
-						</view>
 					</view>
 				</view>
 				
 			</view>
 			<view class="main" v-if="pageType=='outcheck'">
-				<view class="item bg4" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
+				<view class="item bg2" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
 					<view class="item_top fix">
 						<view class="num fl">{{item.name}}</view>
 						<view class="note fr">待检验</view>
@@ -99,7 +111,7 @@
 					<view class="item_bot">
 						<view class="item1 fix">
 							<view class="name fl">检验类型</view>
-							<view class="cont fr">{{item.tabremark}}</view>
+							<view class="cont fr">{{item.type_dictText}}</view>
 						</view>
 						<view class="item1 fix">
 							<view class="name fl">上级单位</view>
@@ -108,10 +120,6 @@
 						<view class="item1 fix">
 							<view class="name fl">使用单位</view>
 							<view class="cont fr">{{item.projectdepartment}}</view>
-						</view>
-						<view class="item1 fix">
-							<view class="name fl">检验时间</view>
-							<view class="cont fr">{{item.checkname}}</view>
 						</view>
 					</view>
 				</view>
@@ -124,133 +132,204 @@
 <script>
 	export default {
 		data() {
+			// const date = new Date()
+			// const years = []
+			// const year = date.getFullYear()
+			// const months = []
+			// const month = date.getMonth() + 1
+			// const days = []
+			// const day = date.getDate()
+			// for (let i = 1990; i <= date.getFullYear(); i++) {
+			// 	years.push(i)
+			// }
+			// for (let i = 1; i <= 12; i++) {
+			// 	months.push(i)
+			// }
+			// for (let i = 1; i <= 31; i++) {
+			// 	days.push(i)
+			// }
 			return {
 				searchTxt:'',
 				pageType:'',
 				dataList:[],
-				isRefreshing:false
+				isRefreshing:false,
+				options:{},
+				pageNo:1,
+				pageSize:4,
+				pages:1,
+				// title:'123',
+				// days1:[1,2,3],
+				// years,
+				// year,
+				// months,
+				// month,
+				// days,
+				// day,
+				// value: [9999, month - 1, day - 1],
+				// visible: true,
+				// indicatorStyle: `height: 50px;`
 			}
 		},
 		onLoad(options) {
 			this.pageNo=1;
-			if(options.type=='in'){
-				this.pageType="in"
-				uni.setNavigationBarTitle({
-				  title: '待入库单'   //页面标题为路由参数
-				})
-				let data={
-					pageNo:1,
-					pageSize:4
-				}
-				this.$api.getInBillData(data).then(res => {
-					console.log(res)
-					if(res.code==200){
-						this.dataList=res.result.records
-						console.log(res.result.records)
-						this.setData({
-							dataList:res.result.records
-						})
-					}
-				   // 获得数据 
-				}).catch(res => {
-				　　// 失败进行的操作
-				})
-			}
-			if(options.type=='out'){
-				this.pageType="out"
-				uni.setNavigationBarTitle({
-				  title: '待出库单'   //页面标题为路由参数
-				})
-				this.$api.getOutBillData().then(res => {
-					console.log(res)
-					if(res.code==200){
-						this.dataList=res.result.records
-						console.log(res.result.records)
-						this.setData({
-							dataList:res.result.records
-						})
-					}
-				   // 获得数据 
-				}).catch(res => {
-				　　// 失败进行的操作
-				})
-			}
-			if(options.type=='incheck'){
-				this.pageType="in"
-				uni.setNavigationBarTitle({
-				  title: '待入库检验'   //页面标题为路由参数
-				})
-				let data={
-					pageNo:1,
-					pageSize:4
-				}
-				this.$api.getInCheeckBillData(data).then(res => {
-					console.log(res)
-					if(res.code==200){
-						this.dataList=res.result.records
-						console.log(res.result.records)
-						this.setData({
-							dataList:res.result.records
-						})
-					}
-				   // 获得数据 
-				}).catch(res => {
-				　　// 失败进行的操作
-				})
-			}
-			if(options.type=='outcheck'){
-				this.pageType="in"
-				uni.setNavigationBarTitle({
-				  title: '待入库检验'   //页面标题为路由参数
-				})
-				let data={
-					pageNo:1,
-					pageSize:4
-				}
-				this.$api.getInCheeckBillData(data).then(res => {
-					console.log(res)
-					if(res.code==200){
-						this.dataList=res.result.records
-						console.log(res.result.records)
-						this.setData({
-							dataList:res.result.records
-						})
-					}
-				   // 获得数据 
-				}).catch(res => {
-				　　// 失败进行的操作
-				})
-			}
+			this.pageType=options.type;
+			this.getListData();
 		},
 		methods: {
+			// bindChange: function (e) {
+			// 	const val = e.detail.value
+			// 	this.year = this.years[val[0]]
+			// 	this.month = this.months[val[1]]
+			// 	this.day = this.days[val[2]]
+			// 	console.log(e)
+			// },
+			
 			scancodestorage: function() {
 				uni.navigateTo({
 					url:"../sweepCodeStorage/sweepCodeStorage"
 				})
 			},
 			search(){
-				console.log(this.searchTxt)
+				this.pageNo=1;
+				this.dataList=[];
+				this.getListData()
+			},
+			getListData(num){
+				console.log(this.pageType)
+				if(this.pageType=='in'){
+					uni.setNavigationBarTitle({
+					  title: '待入库单'   //页面标题为路由参数
+					})
+					let data={
+						pageNo:this.pageNo,
+						pageSize:this.pageSize,
+						name:this.searchTxt	
+					}
+					this.$api.getInBillData(data).then(res => {
+						console.log(res)
+						if(res.code==200){
+							let list=this.dataList;
+							res.result.records.forEach((item,index)=>{
+								list.push(item);
+							})
+							
+							this.pages=res.result.pages;
+							this.dataList=list;
+						}
+					   // 获得数据 
+					}).catch(res => {
+					　　// 失败进行的操作
+					})
+				}
+				if(this.pageType=='out'){
+					uni.setNavigationBarTitle({
+					  title: '待出库单'   //页面标题为路由参数
+					})
+					let data={
+						pageNo:this.pageNo,
+						pageSize:this.pageSize,
+						name:this.searchTxt	
+					}
+					this.$api.getOutBillData(data).then(res => {
+						console.log(res)
+						if(res.code==200){
+							let list=this.dataList;
+							res.result.records.forEach((item,index)=>{
+								list.push(item);
+							})
+							
+							this.pages=res.result.pages;
+							this.dataList=list;
+						}
+					   // 获得数据 
+					}).catch(res => {
+					　　// 失败进行的操作
+					})
+				}
+				if(this.pageType=='incheck'){
+					uni.setNavigationBarTitle({
+					  title: '待入库检验'   //页面标题为路由参数
+					})
+					let data={
+						pageNo:this.pageNo,
+						pageSize:this.pageSize,
+						name:this.searchTxt,
+						type:'入库检验'
+
+					}
+					this.$api.getInCheeckBillData(data).then(res => {
+						console.log(res)
+						if(res.code==200){
+							let list=this.dataList;
+							res.result.records.forEach((item,index)=>{
+								list.push(item);
+							})
+							console.log(res.result.pages)
+							
+							this.pages=res.result.pages;
+							this.dataList=list;
+						}
+					   // 获得数据 
+					}).catch(res => {
+					　　// 失败进行的操作
+					})
+				}
+				if(this.pageType=='outcheck'){
+					uni.setNavigationBarTitle({
+					  title: '待出库检验'   //页面标题为路由参数
+					})
+					let data={
+						pageNo:this.pageNo,
+						pageSize:this.pageSize,
+						name:this.searchTxt,
+						type:'出库检验'
+					}
+					this.$api.getOutCheeckBillData(data).then(res => {
+						console.log(res)
+						if(res.code==200){
+							let list=this.dataList;
+							res.result.records.forEach((item,index)=>{
+								list.push(item);
+							})
+							
+							this.pages=res.result.pages;
+							this.dataList=list;
+						}
+					   // 获得数据 
+					}).catch(res => {
+					　　// 失败进行的操作
+					})
+				}
 			},
 			onRefresherPulling(){
 				if (!this.isRefreshing) {
 					this.isRefreshing = true
-					this.getInfo(1);
+
 					setTimeout(()=>{
 						this.isRefreshing=false
 					},2000)
 				}
 			},
-			async getInfo(pageNum){
-				
-			},
+		
 			//上拉加载下一页
 			onScrollToLower (){
-				if (this.pageNum >= this.pages) {
+				
+				console.log(this.pageNo,this.pages)
+				if (this.pageNo >= this.pages) {
 					return;
 				} else {
-					this.getInfo(this.pageNum + 1);
+					console.log(11)
+					this.pageNo=this.pageNo+1;
+					
+					this.getListData();
 				}
 			},
+			//去设备清单页面
+			toEquBill(id){
+				uni.navigateTo({
+					url:"../tempEquipmentBill/index?type="+this.pageType+"&id="+id
+				})
+			}
 			
 		}
 	}
@@ -313,16 +392,16 @@
 				background: url(@/static/kuang2.png) no-repeat center center;
 				background-size:726rpx 323rpx;
 			}
-			&.bg3{
-				height:447rpx;
-				background: url(@/static/kuang3.png) no-repeat center center;
-				background-size:726rpx 447rpx;
-			}
-			&.bg4{
-				height:375rpx;
-				background: url(@/static/kuang4.png) no-repeat center center;
-				background-size:726rpx 375rpx;
-			}
+			// &.bg3{
+			// 	height:323rpx;
+			// 	background: url(@/static/kuang2.png) no-repeat center center;
+			// 	background-size:726rpx 323rpx;
+			// }
+			// &.bg4{
+			// 	height:375rpx;
+			// 	background: url(@/static/kuang4.png) no-repeat center center;
+			// 	background-size:726rpx 375rpx;
+			// }
 			.item_top{
 				height:100rpx;
 				padding-top: 30rpx;
@@ -331,7 +410,7 @@
 					font-size:24rpx;
 					background-color: rgb( 249, 93, 95 );
 					height: 40rpx;
-					line-height:36rpx;
+					line-height:40rpx;
 					border-radius:20rpx;
 					padding:0 20rpx;
 
@@ -360,4 +439,15 @@
 		width:100%;
 		bottom:0;
 	}
+		.picker-view {
+			width: 750rpx;
+			height: 600rpx;
+			margin-top: 20rpx;
+		}
+		.item {
+			height: 50px;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+		}
 </style>

@@ -3,11 +3,11 @@
 		<view class="banner"></view>
 		<view class="in-out-box">
 			<view class="qrcodebox">
-				<view class="qrcode-fl" @click="toScancodeIn">
+				<view class="qrcode-fl" @click="toBill('in')">
 					<image src="../../static/rk@2x.png" mode=""></image>
 					<text>扫码入库</text>
 				</view>
-				<view class="qrcode-fl" @click="toScancodeOut">
+				<view class="qrcode-fl" @click="toBill('out')">
 					<image src="../../static/ckj@2x.png" mode=""></image>
 					<text>扫码出库</text>
 				</view>
@@ -23,11 +23,11 @@
 					<image src="../../static/ckgl@2x.png" mode=""></image>
 					<text>出库管理</text>
 				</view>
-				<view class="inoutItem"  @click="toInCheck">
+				<view class="inoutItem"  @click="toBill('incheck')">
 					<image src="../../static/srkd@2x.png" mode=""></image>
 					<text>待入库检验</text>
 				</view>
-				<view class="inoutItem" @click="toOutCheck">
+				<view class="inoutItem" @click="toBill('outcheck')">
 					<image src="../../static/dckd@2x.png" mode=""></image>
 					<text>待出库检验</text>
 				</view>
@@ -41,8 +41,8 @@
 			<view class="main2">
 				<navigator class="main2-list" url="../homeModule/applyMustRead" hover-class="none">
 					<view class="main2-list-text">
-						<text>设备检验</text>
-						<text style="color: #999999;font-size: 24rpx;margin-top: 23rpx;">线上快速验收</text>
+						<text>设备入库检验</text>
+						<text style="color: #999999;font-size: 24rpx;margin-top: 23rpx;">查看入库检验</text>
 					</view>
 					<view class="main2-list-img">
 						<image src="../../static/sbjy@2x.png" mode=""></image>
@@ -50,8 +50,8 @@
 				</navigator>
 				<navigator class="main2-list" url="../homeModule/securityObject" hover-class="none">
 					<view class="main2-list-text">
-						<text>现场验收</text>
-						<text style="color: #999999;font-size: 24rpx;margin-top: 23rpx;">线上快速验收</text>
+						<text>待盘点单</text>
+						<text style="color: #999999;font-size: 24rpx;margin-top: 23rpx;">查看待盘点单</text>
 					</view>
 					<view class="main2-list-img">
 						<image src="../../static/xcys@2x.png" mode=""></image>
@@ -59,8 +59,8 @@
 				</navigator>
 				<navigator class="main2-list" url="../homeModule/FundsToIssue" hover-class="none">
 					<view class="main2-list-text">
-						<text>检验管理</text>
-						<text style="color: #999999;font-size: 24rpx;margin-top: 23rpx;">线上快速验收</text>
+						<text>设备出库检验</text>
+						<text style="color: #999999;font-size: 24rpx;margin-top: 23rpx;">查看出库检验</text>
 					</view>
 					<view class="main2-list-img">
 						<image src="../../static/xcgl@2x.png" mode=""></image>
@@ -68,8 +68,8 @@
 				</navigator>
 				<navigator class="main2-list" url="../homeModule/theApplication" hover-class="none">
 					<view class="main2-list-text">
-						<text>现场验收管理</text>
-						<text style="color: #999999;font-size: 24rpx;margin-top: 23rpx;">线上快速验收</text>
+						<text>盘点管理</text>
+						<text style="color: #999999;font-size: 24rpx;margin-top: 23rpx;">线上快速盘点</text>
 					</view>
 					<view class="main2-list-img">
 						<image src="../../static/xcysgl@2x.png" mode=""></image>
@@ -91,26 +91,13 @@
 
 		},
 		methods: {
-			toScancodeIn: function() {
+			//去清单页
+			toBill: function(str) {
 				uni.navigateTo({
-					url:"../tempBill/index?type=in"
+					url:"../tempBill/index?type="+str
 				})
 			},
-			toScancodeOut: function() {
-				uni.navigateTo({
-					url:"../tempBill/index?type=out"
-				})
-			},
-			toInCheck: function() {
-				uni.navigateTo({
-					url:"../tempBill/index?type=incheck"
-				})
-			},
-			toOutCheck: function() {
-				uni.navigateTo({
-					url:"../tempBill/index?type=outcheck"
-				})
-			},
+			
 		}
 	}
 </script>

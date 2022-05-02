@@ -32,12 +32,25 @@ request.globalRequest = (url, method, data, power) => {
         dataType: 'json',
         header: headers
     }).then(res => {
-         return res[1].data
+        console.log(res,123,res[1].statusCode==401)
+        if(res[1].statusCode==401){
+            // uni.clearStorageSync()
+            uni.navigateTo({
+                url:"/pages/login/login"
+            })
+        }
+        if(res[1].statusCode==200){
+            return res[1].data
+        }
     }).catch(parmas => {
+        
         switch (parmas.code) {
             case 401:
                 // uni.clearStorageSync()
-
+                alert(1)
+				uni.navigateTo({
+					url:"./pages/login/login"
+				})
                 break
             default:
                
