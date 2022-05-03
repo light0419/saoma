@@ -15,11 +15,11 @@
 			</view>
 			<view class="inOutForeModel">
 				
-				<view class="inoutItem">
+				<view class="inoutItem" @click="toBill('inware')">
 					<image src="../../static/rkgl@2x.png" mode=""></image>
 					<text>入库管理</text>
 				</view>
-				<view class="inoutItem">
+				<view class="inoutItem" @click="toBill('outware')">
 					<image src="../../static/ckgl@2x.png" mode=""></image>
 					<text>出库管理</text>
 				</view>
@@ -39,7 +39,7 @@
 				<text>设备管理</text>
 			</view>
 			<view class="main2">
-				<navigator class="main2-list" url="../homeModule/applyMustRead" hover-class="none">
+				<navigator class="main2-list"  @click="toBill('inwarecheck')" url="../homeModule/applyMustRead" hover-class="none">
 					<view class="main2-list-text">
 						<text>设备入库检验</text>
 						<text style="color: #999999;font-size: 24rpx;margin-top: 23rpx;">查看入库检验</text>
@@ -57,7 +57,7 @@
 						<image src="../../static/xcys@2x.png" mode=""></image>
 					</view>
 				</navigator>
-				<navigator class="main2-list" url="../homeModule/FundsToIssue" hover-class="none">
+				<navigator class="main2-list" @click="toBill('outwarecheck')" url="../homeModule/FundsToIssue" hover-class="none">
 					<view class="main2-list-text">
 						<text>设备出库检验</text>
 						<text style="color: #999999;font-size: 24rpx;margin-top: 23rpx;">查看出库检验</text>

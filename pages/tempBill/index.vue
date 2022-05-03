@@ -4,7 +4,7 @@
 			<image src="../../static/pic1.jpg" mode="widthFix"></image>
 		</view>
 		<view class="search fix">
-			<input type="text" class="inp1 fl" v-model="searchTxt" placeholder="请输入用户名" placeholder-style="color: #999999;font-size: 28rpx;" />
+			<input type="text" class="inp1 fl" v-model="searchTxt" placeholder="请输入单据编号" placeholder-style="color: #999999;font-size: 28rpx;" />
 			<button class="btn1 fr" @click="search">搜索</button>
 		</view>
 		
@@ -29,7 +29,7 @@
 				<view class="item bg1" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
 					<view class="item_top fix">
 						<view class="num fl">{{item.name}}</view>
-						<view class="note fr">待入库</view>
+						<view class="note fr">{{item.storagestatus}}</view>
 					</view>
 					<view class="item_bot">
 						<view class="item1 fix">
@@ -60,7 +60,7 @@
 				<view class="item bg2" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
 					<view class="item_top fix">
 						<view class="num fl">{{item.name}}</view>
-						<view class="note fr">待出库</view>
+						<view class="note fr">{{item.storagestatus}}</view>
 					</view>
 					<view class="item_bot">
 						<view class="item1 fix">
@@ -83,7 +83,7 @@
 				<view class="item bg3" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
 					<view class="item_top fix">
 						<view class="num fl">{{item.name}}</view>
-						<view class="note fr">待检验</view>
+						<view class="note fr">{{item.storagestatus}}</view>
 					</view>
 					<view class="item_bot">
 						<view class="item1 fix">
@@ -106,7 +106,7 @@
 				<view class="item bg2" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
 					<view class="item_top fix">
 						<view class="num fl">{{item.name}}</view>
-						<view class="note fr">待检验</view>
+						<view class="note fr">{{item.storagestatus}}</view>
 					</view> 
 					<view class="item_bot">
 						<view class="item1 fix">
@@ -121,6 +121,132 @@
 							<view class="name fl">使用单位</view>
 							<view class="cont fr">{{item.projectdepartment}}</view>
 						</view>
+					</view>
+				</view>
+				
+			</view>
+			<view class="main" v-if="pageType=='inware'">
+				<view class="item bg4" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
+					<view class="item_top fix">
+						<view class="num fl">{{item.name}}</view>
+						<view class="note fr">{{item.storagestatus}}</view>
+					</view> 
+					<view class="item_bot">
+						<view class="item1 fix">
+							<view class="name fl">接收人</view>
+							<view class="cont fr">{{item.tabremark_dictText}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">来源</view>
+							<view class="cont fr">{{item.source}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">上级单位</view>
+							<view class="cont fr">{{item.sysOrgCode}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">使用单位</view>
+							<view class="cont fr">{{item.projectdepartment}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">检验单编号</view>
+							<view class="cont fr">{{item.stockcheckid}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">入库时间</view>
+							<view class="cont fr">{{item.storagetime}}</view>
+						</view>
+					</view>
+				</view>
+				
+			</view>
+			<view class="main" v-if="pageType=='outware'">
+				<view class="item bg5" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
+					<view class="item_top fix">
+						<view class="num fl">{{item.name}}</view>
+						<view class="note fr">{{item.storagestatus}}</view>
+					</view> 
+					<view class="item_bot">
+						<view class="item1 fix">
+							<view class="name fl">上级单位</view>
+							<view class="cont fr">{{item.sysOrgCode}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">使用单位</view>
+							<view class="cont fr">{{item.projectdepartment}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">检验单编号</view>
+							<view class="cont fr">{{item.stockremovalcheckid}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">出库时间</view>
+							<view class="cont fr">{{item.stockremovaltime}}</view>
+						</view>
+					</view>
+				</view>
+				
+			</view>
+			<view class="main" v-if="pageType=='inwarecheck'">
+				<view class="item bg6" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
+					<view  @click="toEquBill(item.id)">
+						<view class="item_top fix">
+							<view class="num fl">{{item.name}}</view>
+							<view class="note fr">{{item.storagestatus}}</view>
+						</view> 
+						<view class="item_bot">
+							<view class="item1 fix">
+								<view class="name fl">上级单位</view>
+								<view class="cont fr">{{item.sysOrgCode}}</view>
+							</view>
+							<view class="item1 fix">
+								<view class="name fl">使用单位</view>
+								<view class="cont fr">{{item.projectdepartment}}</view>
+							</view>
+							<view class="item1 fix">
+								<view class="name fl">检验单编号</view>
+								<view class="cont fr">{{item.name}}</view>
+							</view>
+							<view class="item1 fix">
+								<view class="name fl">入库时间</view>
+								<view class="cont fr">{{item.checkouttime}}</view>
+							</view>
+						</view>
+					</view>
+					<view class="item_botn">
+						生成入库单
+					</view>
+				</view>
+				
+			</view>
+			<view class="main" v-if="pageType=='outwarecheck'">
+				<view class="item bg6" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
+					<view @click="toEquBill(item.id)">
+						<view class="item_top fix">
+							<view class="num fl">{{item.name}}</view>
+							<view class="note fr">{{item.storagestatus}}</view>
+						</view> 
+						<view class="item_bot">
+							<view class="item1 fix">
+								<view class="name fl">上级单位</view>
+								<view class="cont fr">{{item.sysOrgCode}}</view>
+							</view>
+							<view class="item1 fix">
+								<view class="name fl">使用单位</view>
+								<view class="cont fr">{{item.projectdepartment}}</view>
+							</view>
+							<view class="item1 fix">
+								<view class="name fl">检验单编号</view>
+								<view class="cont fr">{{item.name}}</view>
+							</view>
+							<view class="item1 fix">
+								<view class="name fl">出库时间</view>
+								<view class="cont fr">{{item.checkouttime}}</view>
+							</view>
+						</view>
+					</view>
+					<view class="item_botn">
+						生成出库单
 					</view>
 				</view>
 				
@@ -300,6 +426,112 @@
 					　　// 失败进行的操作
 					})
 				}
+				if(this.pageType=='inware'){
+					uni.setNavigationBarTitle({
+					  title: '入库管理'   //页面标题为路由参数
+					})
+					let data={
+						pageNo:this.pageNo,
+						pageSize:this.pageSize,
+						name:this.searchTxt,
+						storagestatus:'已入库'
+					}
+					this.$api.getInWareData(data).then(res => {
+						console.log(res)
+						if(res.code==200){
+							let list=this.dataList;
+							res.result.records.forEach((item,index)=>{
+								list.push(item);
+							})
+							
+							this.pages=res.result.pages;
+							this.dataList=list;
+						}
+					   // 获得数据 
+					}).catch(res => {
+					　　// 失败进行的操作
+					})
+				}
+				if(this.pageType=='outware'){
+					uni.setNavigationBarTitle({
+					  title: '出库管理'   //页面标题为路由参数
+					})
+					let data={
+						pageNo:this.pageNo,
+						pageSize:this.pageSize,
+						name:this.searchTxt,
+						storagestatus:'已出库'
+					}
+					this.$api.getOutWareData(data).then(res => {
+						console.log(res)
+						if(res.code==200){
+							let list=this.dataList;
+							res.result.records.forEach((item,index)=>{
+								list.push(item);
+							})
+							
+							this.pages=res.result.pages;
+							this.dataList=list;
+						}
+					   // 获得数据 
+					}).catch(res => {
+					　　// 失败进行的操作
+					})
+				}
+				if(this.pageType=='inwarecheck'){
+					uni.setNavigationBarTitle({
+					  title: '设备入库检验'   //页面标题为路由参数
+					})
+					let data={
+						pageNo:this.pageNo,
+						pageSize:this.pageSize,
+						name:this.searchTxt,
+						type:'入库检验',
+						inspectionstatus:'已检验'
+					}
+					this.$api.getInWareCheckData(data).then(res => {
+						console.log(res)
+						if(res.code==200){
+							let list=this.dataList;
+							res.result.records.forEach((item,index)=>{
+								list.push(item);
+							})
+							
+							this.pages=res.result.pages;
+							this.dataList=list;
+						}
+					   // 获得数据 
+					}).catch(res => {
+					　　// 失败进行的操作
+					})
+				}
+				if(this.pageType=='outwarecheck'){
+					uni.setNavigationBarTitle({
+					  title: '设备出库检验'   //页面标题为路由参数
+					})
+					let data={
+						pageNo:this.pageNo,
+						pageSize:this.pageSize,
+						name:this.searchTxt,
+						type:'出库检验',
+						inspectionstatus:'已检验'
+					}
+					this.$api.getInWareCheckData(data).then(res => {
+						console.log(res)
+						if(res.code==200){
+							let list=this.dataList;
+							res.result.records.forEach((item,index)=>{
+								list.push(item);
+							})
+							
+							this.pages=res.result.pages;
+							this.dataList=list;
+						}
+					   // 获得数据 
+					}).catch(res => {
+					　　// 失败进行的操作
+					})
+				}
 			},
 			onRefresherPulling(){
 				if (!this.isRefreshing) {
@@ -391,6 +623,28 @@
 				height:323rpx;
 				background: url(@/static/kuang2.png) no-repeat center center;
 				background-size:726rpx 323rpx;
+			}
+			&.bg4{
+				height:477rpx;
+				background: url(@/static/kuang5.png) no-repeat center center;
+				background-size:726rpx 477rpx;
+			}
+			&.bg5{
+				height:374rpx;
+				background: url(@/static/kuang6.png) no-repeat center center;
+				background-size:726rpx 374rpx;
+			}
+			&.bg6{
+				height:447rpx;
+				background: url(@/static/kuang7.png) no-repeat center center;
+				background-size:726rpx 447rpx;
+			}
+			.item_botn{
+				color:#016ba9;
+				font-size:28rpx;
+				text-align: center;
+				line-height:60rpx;
+				margin-top: 30rpx;
 			}
 			// &.bg3{
 			// 	height:323rpx;

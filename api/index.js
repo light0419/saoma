@@ -25,6 +25,20 @@ api.getInCheeckBillData = params => request.globalRequest('/jeecg-boot/checkouti
 //获取待出库检验单列表
 api.getOutCheeckBillData = params => request.globalRequest('/jeecg-boot/checkoutinformation/checkoutInformation/listbystatus', 'GET', params)
 
+//获取入库管理列表
+api.getInWareData = params => request.globalRequest('/jeecg-boot/storageinformation/storageInformation/list', 'GET', params)
+
+//获取出库管理列表
+api.getOutWareData = params => request.globalRequest('/jeecg-boot/stockremovalinformation/stockRemovalInformation/list', 'GET', params)
+
+
+//获取设备入库检验列表
+api.getInWareCheckData = params => request.globalRequest('/jeecg-boot/checkoutinformation/checkoutInformation/list', 'GET', params)
+
+
+
+
+
 
 
 //获取待入库设备清单列表
@@ -64,6 +78,15 @@ api.submitOutWare = params => request.globalRequest('/jeecg-boot/stockremovalinf
 
 //待入库检验和待出库检验
 api.submitCheckWare = params => request.globalRequest('/jeecg-boot/checkoutinformation/checkoutInformation/check', 'GET', params)
+
+
+//通过type和id获取所有的设备id
+api.getAllIdByType = params => request.globalRequest('/jeecg-boot/web/facilityInformation/listallbystatus', 'GET', params)
+
+
+
+//获取所有用户
+api.getAllUser = params => request.globalRequest('/jeecg-boot/sys/user/appfinduser', 'GET', params)
 
 
 
