@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<view>
 		<view class="page">
 		  <view class="title">扫码结果</view>
@@ -146,3 +146,4 @@
 		border-radius: 38rpx;
 	}
 </style>
+ -->

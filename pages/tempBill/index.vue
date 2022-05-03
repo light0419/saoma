@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="content" v-if="showContent">
 		<view class="banner">
 			<image src="../../static/pic1.jpg" mode="widthFix"></image>
 		</view>
@@ -7,8 +7,12 @@
 			<input type="text" class="inp1 fl" v-model="searchTxt" placeholder="请输入单据编号" placeholder-style="color: #999999;font-size: 28rpx;" />
 			<button class="btn1 fr" @click="search">搜索</button>
 		</view>
-		
-		<scroll-view scroll-y="true" class="scrollview"  lower-threshold = 100 @scrolltolower='onScrollToLower' :refresher-enabled='true' refresher-background='#F6F6FC' :refresher-triggered='isRefreshing' @refresherpulling='onRefresherPulling'>
+		<view class="nodata" v-if="dataList.length==0">
+			<image src="../../static/nodata.png" mode="widthFix"></image>
+			暂无数据
+		</view>
+		<scroll-view v-else scroll-y="true" class="scrollview"  lower-threshold = 100 @scrolltolower='onScrollToLower' :refresher-enabled='false' refresher-background='#F6F6FC'  >
+			<!-- @refresherpulling='onRefresherPulling'  下拉刷新 -->
 			<!-- <view >
 				 <picker-view v-if="visible" :indicator-style="indicatorStyle" :value="value" @change="bindChange" class="picker-view">
 				            <picker-view-column>
@@ -213,7 +217,11 @@
 							</view>
 						</view>
 					</view>
-					<view class="item_botn">
+					
+					<view class="item_botn" v-if='item.isstock==1'>
+						已入库
+					</view>
+					<view class="item_botn" @click="showTk(item)" v-else>
 						生成入库单
 					</view>
 				</view>
@@ -245,13 +253,52 @@
 							</view>
 						</view>
 					</view>
-					<view class="item_botn">
+					<view class="item_botn" v-if='item.isstockremoval==1'>
+						已出库
+					</view>
+					<view class="item_botn" @click="showTk(item)" v-else>
 						生成出库单
 					</view>
 				</view>
 				
 			</view>
 		</scroll-view>
+    <view class="tk_hsbtm" v-if="tkshow" @click="hideTk"></view>
+
+		<view class="tk_saoma1 tk_public" v-if="tkshow1">
+			<view class="tk_close" @click="hideTk"></view>
+			<view class="tit">
+				<image src="../../static/word_scrkd.png" mode="widthFix"></image>
+			</view>
+			<view class="cont">
+				<view class="select">
+					<picker
+					class="picker"
+					@change="(e) => bindPickerChange(e)"
+					:value="arrIndex"
+					:range="userList"
+					:range-key="'label'"
+				>
+					<view class="uni-input">{{ userList[arrIndex] }}</view>
+				</picker>
+				</view>
+			</view>
+			<view class="bot fix">
+				<view class="btn2 auto" @click="submitInWareCheck">完成</view>
+			</view>
+		</view>
+		<view class="tk_saoma1 tk_public" v-if="tkshow2">
+			<view class="tk_close" @click="hideTk"></view>
+			<view class="tit">
+				<image src="../../static/word_scckd.png" mode="widthFix"></image>
+			</view>
+			<view class="cont">
+				<view class="note">点击完成生成出库单！</view>
+			</view>
+			<view class="bot fix">
+				<view class="btn2 auto" @click="submitOutWareCheck">完成</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -275,6 +322,7 @@
 			// 	days.push(i)
 			// }
 			return {
+				selectBill:{},
 				searchTxt:'',
 				pageType:'',
 				dataList:[],
@@ -283,6 +331,13 @@
 				pageNo:1,
 				pageSize:4,
 				pages:1,
+				userList:[],
+				tkshow: false,
+				tkshow1: false,
+				tkshow2: false,
+				tkshow3: false,
+				arrIndex:0,
+				showContent:false,
 				// title:'123',
 				// days1:[1,2,3],
 				// years,
@@ -300,6 +355,7 @@
 			this.pageNo=1;
 			this.pageType=options.type;
 			this.getListData();
+			this.getAllUser();
 		},
 		methods: {
 			// bindChange: function (e) {
@@ -309,7 +365,18 @@
 			// 	this.day = this.days[val[2]]
 			// 	console.log(e)
 			// },
-			
+			//获取用户
+			getAllUser(){
+				this.$api.getAllUser().then(res => {
+					console.log(res)
+					if(res.code==200){
+						this.userList=res.result
+					}
+					// 获得数据 
+				}).catch(res => {
+				　　// 失败进行的操作
+				})
+			},
 			scancodestorage: function() {
 				uni.navigateTo({
 					url:"../sweepCodeStorage/sweepCodeStorage"
@@ -321,7 +388,9 @@
 				this.getListData()
 			},
 			getListData(num){
-				console.log(this.pageType)
+				uni.showLoading({
+					title: '加载中'
+				});
 				if(this.pageType=='in'){
 					uni.setNavigationBarTitle({
 					  title: '待入库单'   //页面标题为路由参数
@@ -341,6 +410,9 @@
 							
 							this.pages=res.result.pages;
 							this.dataList=list;
+							this.showContent=true;
+							uni.hideLoading()
+
 						}
 					   // 获得数据 
 					}).catch(res => {
@@ -366,6 +438,9 @@
 							
 							this.pages=res.result.pages;
 							this.dataList=list;
+							this.showContent=true;
+							uni.hideLoading()
+
 						}
 					   // 获得数据 
 					}).catch(res => {
@@ -394,6 +469,9 @@
 							
 							this.pages=res.result.pages;
 							this.dataList=list;
+							this.showContent=true;
+							uni.hideLoading()
+
 						}
 					   // 获得数据 
 					}).catch(res => {
@@ -420,6 +498,9 @@
 							
 							this.pages=res.result.pages;
 							this.dataList=list;
+							this.showContent=true;
+							uni.hideLoading()
+
 						}
 					   // 获得数据 
 					}).catch(res => {
@@ -446,6 +527,9 @@
 							
 							this.pages=res.result.pages;
 							this.dataList=list;
+							this.showContent=true;
+							uni.hideLoading()
+
 						}
 					   // 获得数据 
 					}).catch(res => {
@@ -472,6 +556,9 @@
 							
 							this.pages=res.result.pages;
 							this.dataList=list;
+							this.showContent=true;
+							uni.hideLoading()
+
 						}
 					   // 获得数据 
 					}).catch(res => {
@@ -499,6 +586,9 @@
 							
 							this.pages=res.result.pages;
 							this.dataList=list;
+							this.showContent=true;
+							uni.hideLoading()
+
 						}
 					   // 获得数据 
 					}).catch(res => {
@@ -526,6 +616,9 @@
 							
 							this.pages=res.result.pages;
 							this.dataList=list;
+							this.showContent=true;
+							uni.hideLoading()
+
 						}
 					   // 获得数据 
 					}).catch(res => {
@@ -560,6 +653,85 @@
 			toEquBill(id){
 				uni.navigateTo({
 					url:"../tempEquipmentBill/index?type="+this.pageType+"&id="+id
+				})
+			},
+			 showTk(item) {
+				this.selectBill=item;
+				if (this.pageType == "inwarecheck") {
+					this.tkshow = true;
+					this.tkshow1 = true;
+				}
+				if (this.pageType == "outwarecheck") {
+					this.tkshow = true;
+					this.tkshow2 = true;
+				}
+			},
+			hideTk() {
+				this.tkshow = false;
+				this.tkshow1 = false;
+				this.tkshow2 = false;
+				this.tkshow3 = false;
+				this.tkshow4 = false;
+				this.outWareText = "";
+			},
+			bindPickerChange(e) {
+				this.arrIndex = e.target.value; //取其下标
+			
+			// this.getChildWareList(e);
+			},
+			submitInWareCheck(){
+				let billItem=this.selectBill;
+				let name=this.userList[this.arrIndex];
+				let data={
+					checkname:billItem.name,
+					projectdepartment:billItem.projectdepartment,
+					projectdepartmentid:billItem.projectdepartmentid,
+					source:'回收设备',
+					stockcheckid:billItem.id,
+					tabremark:name
+				}
+				console.log(data,'121')
+				
+				this.$api.createInWareBill(data).then(res => {
+					if(res.code==200){
+						this.hideTk();
+						this.arrIndex=0;
+						uni.showToast({
+							title: "操作成功",
+							duration: 2000
+						});
+						this.dataList=[];
+						this.getListData();
+					}
+					// 获得数据 
+				}).catch(res => {
+				　　// 失败进行的操作
+				})
+			},
+			submitOutWareCheck(){
+				let billItem=this.selectBill;
+				let name=this.userList[this.arrIndex];
+				let data={
+					checkname:billItem.name,
+					projectdepartment:billItem.projectdepartment,
+					projectdepartmentid:billItem.projectdepartmentid,
+					stockremovalcheckid:billItem.id
+				}
+				
+				this.$api.createOutWareBill(data).then(res => {
+					if(res.code==200){
+						this.hideTk();
+						this.arrIndex=0;
+						uni.showToast({
+							title: "操作成功",
+							duration: 2000
+						});
+						this.dataList=[];
+						this.getListData();
+					}
+					// 获得数据 
+				}).catch(res => {
+				　　// 失败进行的操作
 				})
 			}
 			
@@ -693,15 +865,97 @@
 		width:100%;
 		bottom:0;
 	}
-		.picker-view {
-			width: 750rpx;
-			height: 600rpx;
-			margin-top: 20rpx;
-		}
-		.item {
-			height: 50px;
-			align-items: center;
-			justify-content: center;
-			text-align: center;
-		}
+	.picker-view {
+		width: 750rpx;
+		height: 600rpx;
+		margin-top: 20rpx;
+	}
+	.item {
+		height: 50px;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+	}
+.tk_public {
+  width: 700rpx;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  background: url(/static/huakuang1.png) no-repeat center top #fff;
+  background-size: 700rpx;
+  border-radius: 10rpx;
+  padding-bottom: 75rpx;
+}
+.tk_saoma1 {
+  .tit {
+    text-align: center;
+    padding-top: 77rpx;
+    padding-bottom: 150rpx;
+    image {
+      width: 405rpx;
+      height: 85rpx;
+    }
+  }
+  .cont {
+    padding-left: 55rpx;
+    padding-right: 55rpx;
+	.note{
+		text-align: center;
+		font-size:36rpx;
+		color:#666;
+	}
+    .select {
+      border-radius: 10rpx;
+      background: url(/static/sanjiao.png) no-repeat 95% center
+        rgb(255, 255, 255);
+      box-shadow: 0rpx 5rpx 9.6rpx 0.4rpx rgba(1, 107, 169, 0.33);
+      width: 590rpx;
+      height: 86rpx;
+      margin-bottom: 15rpx;
+
+      .picker {
+        padding-left: 26px;
+        line-height: 86rpx;
+        font-size: 32rpx;
+      }
+    }
+  }
+  .bot {
+    padding-left: 55rpx;
+    padding-right: 55rpx;
+    padding-top: 70rpx;
+    .btn1 {
+      border-radius: 20rpx;
+      background-color: rgb(242, 242, 242);
+      width: 280rpx;
+      height: 72rpx;
+      text-align: center;
+      line-height: 72rpx;
+      color: #666666;
+      font-size: 30rpx;
+    }
+    .btn2 {
+      border-radius: 20rpx;
+      background-color: #016ba9;
+      width: 280rpx;
+      height: 72rpx;
+      text-align: center;
+      line-height: 72rpx;
+      color: #fff;
+      font-size: 30rpx;
+    }
+  }
+}
+.tk_hsbtm {
+  background: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
 </style>

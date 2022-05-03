@@ -50,23 +50,22 @@
                 "ad" : {}
             }
         },
-        "nativePlugins" : {
-            "yy-scanbarcode" : {
-                "__plugin_info__" : {
-                    "name" : "二维码扫码 条形码 自定义持续扫描功能 仿PDA扫码功能 - [试用版，仅用于自定义调试基座]",
-                    "description" : "二维码 条形码 原生插件持续扫码功能集成，支持反复扫码，支持清除数据缓存，开关灯类似于扫码枪一直扫描",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=1479",
-                    "android_package_name" : "",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 0,
-                    "pid" : "1479",
-                    "parameters" : {}
-                }
-            }
-        }
+        "nativePlugins" : {}
     },
+    // "yy-scanbarcode" : {
+    //     "__plugin_info__" : {
+    //         "name" : "二维码扫码 条形码 自定义持续扫描功能 仿PDA扫码功能 - [试用版，仅用于自定义调试基座]",
+    //         "description" : "二维码 条形码 原生插件持续扫码功能集成，支持反复扫码，支持清除数据缓存，开关灯类似于扫码枪一直扫描",
+    //         "platforms" : "Android",
+    //         "url" : "https://ext.dcloud.net.cn/plugin?id=1479",
+    //         "android_package_name" : "",
+    //         "ios_bundle_id" : "",
+    //         "isCloud" : true,
+    //         "bought" : 0,
+    //         "pid" : "1479",
+    //         "parameters" : {}
+    //     }
+    // }
     /* 快应用特有相关 */
     "quickapp" : {},
     /* 小程序特有相关 */

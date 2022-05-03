@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<view class="storageform">
 		<view class="listgroup">
 			<view class="listItem flx">
@@ -110,3 +110,4 @@
 	}
 	
 </style>
+ -->

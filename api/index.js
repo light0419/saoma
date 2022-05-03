@@ -91,7 +91,12 @@ api.getAllUser = params => request.globalRequest('/jeecg-boot/sys/user/appfindus
 
 
 
+//生成入库单
+api.createInWareBill = params => request.globalRequest('/jeecg-boot/storageinformation/storageInformation/add', 'POST', params)
 
+
+//生成出库单
+api.createOutWareBill = params => request.globalRequest('/jeecg-boot/stockremovalinformation/stockRemovalInformation/add', 'POST', params)
 
 
 export default api

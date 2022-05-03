@@ -1,5 +1,5 @@
 <template>
-  <view class="content">
+  <view class="content"  v-if="showContent">
     <view
       class="top"
       @click="saoma"
@@ -10,18 +10,24 @@
       <view class="word" v-else-if="pageType == 'out'"> 点击扫码出库 </view>
       <view class="word" v-else> 点击扫码检验 </view>
     </view>
-
+	<view class="nodata" v-if="dataList.length==0">
+			<image src="../../static/nodata.png" mode="widthFix"></image>
+			暂无数据
+		</view>
     <!-- {{codeResult}} -->
     <scroll-view
+	v-else
       scroll-y="true"
       class="scrollview"
+	  :class="isTop"
       lower-threshold="100"
       @scrolltolower="onScrollToLower"
-      :refresher-enabled="true"
+      :refresher-enabled="false"
       refresher-background="#F6F6FC"
       :refresher-triggered="isRefreshing"
-      @refresherpulling="onRefresherPulling"
     >
+	<!-- 
+      @refresherpulling="onRefresherPulling" -->
       <view class="main auto" v-if="pageType == 'in'">
         <view
           class="item rel"
@@ -595,6 +601,7 @@ export default {
       tkshow1: false,
       tkshow2: false,
       tkshow3: false,
+	  isTop:'',
       array: [
         {
           label: "aa1",
@@ -613,6 +620,7 @@ export default {
           value: "444",
         },
       ],
+	  showContent:false,
       wareList: [
         {
           arrIndex: 0,
@@ -644,6 +652,10 @@ export default {
     this.getData();
     this.getParentWareList();
     this.getAllId();
+
+	if(this.pageType=='inware'||this.pageType=='outware'||this.pageType=='inwarecheck'||this.pageType=='outwarecheck'){
+		this.isTop='on'
+	}
   },
   methods: {
     // scancodestorage: function() {
@@ -692,6 +704,9 @@ export default {
     },
     //获取具体数据
     getData(init) {
+		uni.showLoading({
+			title: '加载中'
+		});
       if (init) {
         this.dataList = [];
       }
@@ -717,6 +732,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
+			  this.showContent=true;
+			  uni.hideLoading()
             }
             // 获得数据
           })
@@ -746,6 +763,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
+			  this.showContent=true;
+			  uni.hideLoading()
             }
             // 获得数据
           })
@@ -775,6 +794,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
+			  this.showContent=true;
+			  uni.hideLoading()
             }
             // 获得数据
           })
@@ -804,6 +825,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
+			  this.showContent=true;
+			  uni.hideLoading()
             }
             // 获得数据
           })
@@ -833,6 +856,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
+			  this.showContent=true;
+			  uni.hideLoading()
             }
             // 获得数据
           })
@@ -862,6 +887,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
+			  this.showContent=true;
+			  uni.hideLoading()
             }
             // 获得数据
           })
@@ -890,6 +917,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
+			  this.showContent=true;
+			  uni.hideLoading()
             }
             // 获得数据
           })
@@ -918,6 +947,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
+			  this.showContent=true;
+			  uni.hideLoading()
             }
             // 获得数据
           })
@@ -995,7 +1026,6 @@ export default {
 					}
 					
 				}
-				
 				else{
 					uni.showToast({
 							title: "扫码错误，请重试",
@@ -1585,6 +1615,7 @@ export default {
     color: #666666;
     font-size: 26rpx;
     line-height: 56rpx;
+	
     .item1 {
       width: 50%;
       height: 56rpx;
@@ -1695,5 +1726,15 @@ export default {
     color: #fff;
     font-size: 30rpx;
   }
+}
+.scrollview{
+	position: fixed;
+	top:300rpx;
+	left:0;
+	right:0;
+	bottom:0;
+	&.on{
+		top:0;
+	}
 }
 </style>

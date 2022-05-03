@@ -12,7 +12,7 @@
 	}
 </script>
 
-<style>
+<style lang='less'>
 	/*每个页面公共css */
 	*{
 		margin: 0;
@@ -61,5 +61,15 @@
 		position: relative;
 		top:-1px;
 		display: inline-block;
+	}
+	.nodata{
+		text-align: center;
+		font-size:30rpx;
+		color:#666;
+		image{
+			width:100%;
+			display: block;
+		}
+		
 	}
 </style>

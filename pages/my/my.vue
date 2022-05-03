@@ -84,11 +84,9 @@
 			}
 		},
 		onLoad() {
-			console.log(uni.getStorageSync('userinfo'))
 			this.userName=JSON.parse(JSON.stringify(uni.getStorageSync('userinfo'))).realname;
 			this.orgCode=JSON.parse(JSON.stringify(uni.getStorageSync('userinfo'))).orgCode;
 			this.$api.getMyData().then(res => {
-				console.log(res)
 				if(res.code==200){
 					this.equipmentoriginalvalues=res.result.equipmentoriginalvalues;
 					this.stockRemovalInformationsum=res.result.stockRemovalInformationsum;
