@@ -682,6 +682,7 @@ export default {
 		else{
 			type='';
 		}
+		console.log(type,'type')
 		if(type){
 			 let data = {
 				type:type,
@@ -984,7 +985,7 @@ export default {
       uni.scanCode({
       	onlyFromCamera: true,
       	autoDecodeCharset:true,
-      	scanType: ['barCode','qrCode'],
+      	scanType: ['barCode'],
       	success: function (res) {
       		that.codeResult=res.result;
       		let data={
@@ -996,7 +997,8 @@ export default {
       			if (res.code == 200) {
 					let id=res.result[0].id;
 					let isBillId=false;
-					let allIdArr=this.allIdArr;
+					let allIdArr=that.allIdArr;
+					console.log(allIdArr)
 					if(allIdArr.length){
 						for(let i =0;i<allIdArr.length;i++){
 							if(id==allIdArr[i]){
@@ -1014,8 +1016,8 @@ export default {
 						});
 					}
 					if(isBillId){
-						this.selectEquip = res.result[0];
-						this.showTk();
+						that.selectEquip = res.result[0];
+						that.showTk();
 					}
 					else{
 						uni.showToast({
@@ -1028,7 +1030,7 @@ export default {
 				}
 				else{
 					uni.showToast({
-							title: "扫码错误，请重试",
+							title: "扫码错误，请重试1",
 							icon: "none",
 							duration: 2000,
 						});
@@ -1036,16 +1038,16 @@ export default {
       		// 获得数据
       		}).catch(res => {
       		　　// 失败进行的操作
-      			uni.showToast({
-      				title: '扫码失败，请重试！',
-      				duration: 2000
-      			});
+      			// uni.showToast({
+      			// 	title: '扫码失败，请重试！',
+      			// 	duration: 2000
+      			// });
       		})
 
       	}
       });
     //   let data = {
-    //     number: "LQZHJT-0110197",
+    //     number: "1651594456826422",
     //     // isstorage:'1'
     //   };
     //   that.$api
