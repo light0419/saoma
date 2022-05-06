@@ -11,7 +11,7 @@
 			<image src="../../static/nodata.png" mode="widthFix"></image>
 			暂无数据
 		</view>
-		<scroll-view v-else scroll-y="true" class="scrollview"  lower-threshold = 100 @scrolltolower='onScrollToLower' :refresher-enabled='false' refresher-background='#F6F6FC'  >
+		<scroll-view v-else scroll-y="true" class="scrollview"  lower-threshold = 100 @scrolltolower='onScrollToLower' :refresher-enabled='false' refresher-background='#F6F6FC'>
 			<!-- @refresherpulling='onRefresherPulling'  下拉刷新 -->
 			<!-- <view >
 				 <picker-view v-if="visible" :indicator-style="indicatorStyle" :value="value" @change="bindChange" class="picker-view">
