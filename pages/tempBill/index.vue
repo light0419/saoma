@@ -191,10 +191,10 @@
 						<view class="note fr">{{item.storagestatus}}</view>
 					</view> 
 					<view class="item_bot">
-						<view class="item1 fix">
+						<!-- <view class="item1 fix">
 							<view class="name fl">上级单位</view>
 							<view class="cont fr">{{item.sysOrgCode}}</view>
-						</view>
+						</view> -->
 						<view class="item1 fix">
 							<view class="name fl">使用单位</view>
 							<view class="cont fr">{{item.projectdepartment}}</view>

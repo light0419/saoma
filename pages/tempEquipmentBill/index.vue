@@ -128,7 +128,7 @@
           :key="index"
           @click="selectEquipData(item)"
         >
-          <view class="item_abs abs">{{ item.facilitystatus }}</view>
+          <view class="item_abs abs">{{ item.inspectionstatus }}</view>
           <view class="item_tit fix">
             <view class="tit fl">
               <image src="../../static/icon1.png" mode="widthFix"></image>
@@ -172,7 +172,7 @@
           :key="index"
           @click="selectEquipData(item)"
         >
-          <view class="item_abs abs">{{ item.facilitystatus }}</view>
+          <view class="item_abs abs">{{ item.inspectionstatus }}</view>
           <view class="item_tit fix">
             <view class="tit fl">
               <image src="../../static/icon1.png" mode="widthFix"></image>
