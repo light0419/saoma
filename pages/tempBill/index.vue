@@ -44,10 +44,10 @@
 							<view class="name fl">来源</view>
 							<view class="cont fr">{{item.source}}</view>
 						</view>
-						<view class="item1 fix">
+						<!-- <view class="item1 fix">
 							<view class="name fl">上级单位</view>
 							<view class="cont fr">{{item.sysOrgCode}}</view>
-						</view>
+						</view> -->
 						<view class="item1 fix">
 							<view class="name fl">使用单位</view>
 							<view class="cont fr">{{item.projectdepartment}}</view>
@@ -55,6 +55,10 @@
 						<view class="item1 fix">
 							<view class="name fl">检验单编号</view>
 							<view class="cont fr">{{item.checkname}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">创建时间</view>
+							<view class="cont fr">{{item.createTime}}</view>
 						</view>
 					</view>
 				</view>
@@ -67,10 +71,10 @@
 						<view class="note fr">{{item.storagestatus}}</view>
 					</view>
 					<view class="item_bot">
-						<view class="item1 fix">
+						<!-- <view class="item1 fix">
 							<view class="name fl">上级单位</view>
 							<view class="cont fr">{{item.sysOrgCode}}</view>
-						</view>
+						</view> -->
 						<view class="item1 fix">
 							<view class="name fl">使用单位</view>
 							<view class="cont fr">{{item.projectdepartment}}</view>
@@ -78,6 +82,10 @@
 						<view class="item1 fix">
 							<view class="name fl">检验单编号</view>
 							<view class="cont fr">{{item.checkname}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">创建时间</view>
+							<view class="cont fr">{{item.createTime}}</view>
 						</view>
 					</view>
 				</view>
@@ -87,20 +95,24 @@
 				<view class="item bg3" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
 					<view class="item_top fix">
 						<view class="num fl">{{item.name}}</view>
-						<view class="note fr">{{item.storagestatus}}</view>
+						<view class="note fr">{{item.inspectionstatus}}</view>
 					</view>
 					<view class="item_bot">
 						<view class="item1 fix">
 							<view class="name fl">检验类型</view>
 							<view class="cont fr">{{item.type_dictText}}</view>
 						</view>
-						<view class="item1 fix">
+						<!-- <view class="item1 fix">
 							<view class="name fl">上级单位</view>
 							<view class="cont fr">{{item.sysOrgCode}}</view>
-						</view>
+						</view> -->
 						<view class="item1 fix">
 							<view class="name fl">使用单位</view>
 							<view class="cont fr">{{item.projectdepartment}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">创建时间</view>
+							<view class="cont fr">{{item.createTime}}</view>
 						</view>
 					</view>
 				</view>
@@ -110,20 +122,24 @@
 				<view class="item bg2" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
 					<view class="item_top fix">
 						<view class="num fl">{{item.name}}</view>
-						<view class="note fr">{{item.storagestatus}}</view>
+						<view class="note fr">{{item.inspectionstatus}}</view>
 					</view> 
 					<view class="item_bot">
 						<view class="item1 fix">
 							<view class="name fl">检验类型</view>
 							<view class="cont fr">{{item.type_dictText}}</view>
 						</view>
-						<view class="item1 fix">
+						<!-- <view class="item1 fix">
 							<view class="name fl">上级单位</view>
 							<view class="cont fr">{{item.sysOrgCode}}</view>
-						</view>
+						</view> -->
 						<view class="item1 fix">
 							<view class="name fl">使用单位</view>
 							<view class="cont fr">{{item.projectdepartment}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">创建时间</view>
+							<view class="cont fr">{{item.createTime}}</view>
 						</view>
 					</view>
 				</view>
@@ -144,10 +160,10 @@
 							<view class="name fl">来源</view>
 							<view class="cont fr">{{item.source}}</view>
 						</view>
-						<view class="item1 fix">
+						<!-- <view class="item1 fix">
 							<view class="name fl">上级单位</view>
 							<view class="cont fr">{{item.sysOrgCode}}</view>
-						</view>
+						</view> -->
 						<view class="item1 fix">
 							<view class="name fl">使用单位</view>
 							<view class="cont fr">{{item.projectdepartment}}</view>
@@ -159,6 +175,10 @@
 						<view class="item1 fix">
 							<view class="name fl">入库时间</view>
 							<view class="cont fr">{{item.storagetime}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">创建时间</view>
+							<view class="cont fr">{{item.createTime}}</view>
 						</view>
 					</view>
 				</view>
@@ -187,6 +207,10 @@
 							<view class="name fl">出库时间</view>
 							<view class="cont fr">{{item.stockremovaltime}}</view>
 						</view>
+						<view class="item1 fix">
+							<view class="name fl">创建时间</view>
+							<view class="cont fr">{{item.createTime}}</view>
+						</view>
 					</view>
 				</view>
 				
@@ -199,10 +223,10 @@
 							<view class="note fr">{{item.storagestatus}}</view>
 						</view> 
 						<view class="item_bot">
-							<view class="item1 fix">
+							<!-- <view class="item1 fix">
 								<view class="name fl">上级单位</view>
 								<view class="cont fr">{{item.sysOrgCode}}</view>
-							</view>
+							</view> -->
 							<view class="item1 fix">
 								<view class="name fl">使用单位</view>
 								<view class="cont fr">{{item.projectdepartment}}</view>
@@ -214,6 +238,10 @@
 							<view class="item1 fix">
 								<view class="name fl">入库时间</view>
 								<view class="cont fr">{{item.checkouttime}}</view>
+							</view>
+							<view class="item1 fix">
+								<view class="name fl">创建时间</view>
+								<view class="cont fr">{{item.createTime}}</view>
 							</view>
 						</view>
 					</view>
@@ -235,10 +263,10 @@
 							<view class="note fr">{{item.storagestatus}}</view>
 						</view> 
 						<view class="item_bot">
-							<view class="item1 fix">
+							<!-- <view class="item1 fix">
 								<view class="name fl">上级单位</view>
 								<view class="cont fr">{{item.sysOrgCode}}</view>
-							</view>
+							</view> -->
 							<view class="item1 fix">
 								<view class="name fl">使用单位</view>
 								<view class="cont fr">{{item.projectdepartment}}</view>
@@ -248,8 +276,12 @@
 								<view class="cont fr">{{item.name}}</view>
 							</view>
 							<view class="item1 fix">
-								<view class="name fl">出库时间</view>
+								<view class="name fl">检验时间</view>
 								<view class="cont fr">{{item.checkouttime}}</view>
+							</view>
+							<view class="item1 fix">
+								<view class="name fl">创建时间</view>
+								<view class="cont fr">{{item.createTime}}</view>
 							</view>
 						</view>
 					</view>
@@ -357,6 +389,10 @@
 			this.getListData();
 			this.getAllUser();
 		},
+		onShow(){
+			this.getListData();
+			this.getAllUser();
+		},
 		methods: {
 			// bindChange: function (e) {
 			// 	const val = e.detail.value
@@ -398,6 +434,8 @@
 					let data={
 						pageNo:this.pageNo,
 						pageSize:this.pageSize,
+						column:'createTime',
+						order:'desc',
 						name:this.searchTxt	
 					}
 					this.$api.getInBillData(data).then(res => {
@@ -426,6 +464,8 @@
 					let data={
 						pageNo:this.pageNo,
 						pageSize:this.pageSize,
+						column:'createTime',
+						order:'desc',
 						name:this.searchTxt	
 					}
 					this.$api.getOutBillData(data).then(res => {
@@ -454,6 +494,8 @@
 					let data={
 						pageNo:this.pageNo,
 						pageSize:this.pageSize,
+						column:'createTime',
+						order:'desc',
 						name:this.searchTxt,
 						type:'入库检验'
 
@@ -485,6 +527,8 @@
 					let data={
 						pageNo:this.pageNo,
 						pageSize:this.pageSize,
+						column:'createTime',
+						order:'desc',
 						name:this.searchTxt,
 						type:'出库检验'
 					}
@@ -514,6 +558,8 @@
 					let data={
 						pageNo:this.pageNo,
 						pageSize:this.pageSize,
+						column:'createTime',
+						order:'desc',
 						name:this.searchTxt,
 						storagestatus:'已入库'
 					}
@@ -543,6 +589,8 @@
 					let data={
 						pageNo:this.pageNo,
 						pageSize:this.pageSize,
+						column:'createTime',
+						order:'desc',
 						name:this.searchTxt,
 						storagestatus:'已出库'
 					}
@@ -572,6 +620,8 @@
 					let data={
 						pageNo:this.pageNo,
 						pageSize:this.pageSize,
+						column:'createTime',
+						order:'desc',
 						name:this.searchTxt,
 						type:'入库检验',
 						inspectionstatus:'已检验'
@@ -602,6 +652,8 @@
 					let data={
 						pageNo:this.pageNo,
 						pageSize:this.pageSize,
+						column:'createTime',
+						order:'desc',
 						name:this.searchTxt,
 						type:'出库检验',
 						inspectionstatus:'已检验'
@@ -701,6 +753,7 @@
 							duration: 2000
 						});
 						this.dataList=[];
+						this.pageNo=1;
 						this.getListData();
 					}
 					// 获得数据 
@@ -727,6 +780,7 @@
 							duration: 2000
 						});
 						this.dataList=[];
+						this.pageNo=1;
 						this.getListData();
 					}
 					// 获得数据 
@@ -816,7 +870,7 @@
 				font-size:28rpx;
 				text-align: center;
 				line-height:60rpx;
-				margin-top: 30rpx;
+				margin-top: 20rpx;
 			}
 			// &.bg3{
 			// 	height:323rpx;
@@ -850,7 +904,7 @@
 			.item_bot{
 				padding-top: 22rpx;
 				.item1{
-					line-height:50rpx;
+					line-height:54rpx;
 					color:#666666;
 					font-size:26rpx;
 					

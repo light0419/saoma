@@ -67,7 +67,7 @@ api.getParentWareList = params => request.globalRequest('/jeecg-boot/warehouse/w
 api.getChildWareList = params => request.globalRequest('/jeecg-boot/warehouse/warehouse/childList', 'GET', params)
 
 //通过编号获取设备详情
-api.getEquipDataByNum = params => request.globalRequest('/jeecg-boot/facilityinformation/facilityInformation/getbynumber', 'GET', params)
+api.getEquipDataByNum = params => request.globalRequest('/jeecg-boot/web/facilityInformation/getbynumber', 'GET', params)
 
 
 //待入库提交入库

@@ -1,32 +1,37 @@
 <template>
-  <view class="content"  v-if="showContent">
+  <view class="content" v-if="showContent">
     <view
       class="top"
       @click="saoma"
-      v-if="pageType != 'inware' && pageType != 'outware' && pageType != 'inwarecheck' && pageType != 'outwarecheck'"
+      v-if="
+        pageType != 'inware' &&
+        pageType != 'outware' &&
+        pageType != 'inwarecheck' &&
+        pageType != 'outwarecheck'
+      "
     >
       <image src="../../static/saoma.png" mode="widthFix"></image>
       <view class="word" v-if="pageType == 'in'"> 点击扫码入库 </view>
       <view class="word" v-else-if="pageType == 'out'"> 点击扫码出库 </view>
       <view class="word" v-else> 点击扫码检验 </view>
     </view>
-	<view class="nodata" v-if="dataList.length==0">
-			<image src="../../static/nodata.png" mode="widthFix"></image>
-			暂无数据
-		</view>
+    <view class="nodata" v-if="dataList.length == 0">
+      <image src="../../static/nodata.png" mode="widthFix"></image>
+      暂无数据
+    </view>
     <!-- {{codeResult}} -->
     <scroll-view
-	v-else
+      v-else
       scroll-y="true"
       class="scrollview"
-	  :class="isTop"
+      :class="isTop"
       lower-threshold="100"
       @scrolltolower="onScrollToLower"
       :refresher-enabled="false"
       refresher-background="#F6F6FC"
       :refresher-triggered="isRefreshing"
     >
-	<!-- 
+      <!-- 
       @refresherpulling="onRefresherPulling" -->
       <view class="main auto" v-if="pageType == 'in'">
         <view
@@ -282,7 +287,7 @@
           </view>
         </view>
       </view>
-	  <view class="main auto" v-if="pageType == 'inwarecheck'">
+      <view class="main auto" v-if="pageType == 'inwarecheck'">
         <view class="item rel" v-for="(item, index) in dataList" :key="index">
           <view class="item_abs abs">{{ item.facilitystatus }}</view>
           <view class="item_tit fix">
@@ -321,7 +326,7 @@
           </view>
         </view>
       </view>
-	  <view class="main auto" v-if="pageType == 'outwarecheck'">
+      <view class="main auto" v-if="pageType == 'outwarecheck'">
         <view class="item rel" v-for="(item, index) in dataList" :key="index">
           <view class="item_abs abs">{{ item.facilitystatus }}</view>
           <view class="item_tit fix">
@@ -591,7 +596,7 @@ export default {
       pageSize: 4,
       pages: 1,
       arrIndex: 0,
-	  allIdArr:[],
+      allIdArr: [],
       selectEquip: {},
       tkSuccessShow: false,
       outWareText: "", //出库说明
@@ -601,7 +606,7 @@ export default {
       tkshow1: false,
       tkshow2: false,
       tkshow3: false,
-	  isTop:'',
+      isTop: "",
       array: [
         {
           label: "aa1",
@@ -620,7 +625,7 @@ export default {
           value: "444",
         },
       ],
-	  showContent:false,
+      showContent: false,
       wareList: [
         {
           arrIndex: 0,
@@ -653,9 +658,14 @@ export default {
     this.getParentWareList();
     this.getAllId();
 
-	if(this.pageType=='inware'||this.pageType=='outware'||this.pageType=='inwarecheck'||this.pageType=='outwarecheck'){
-		this.isTop='on'
-	}
+    if (
+      this.pageType == "inware" ||
+      this.pageType == "outware" ||
+      this.pageType == "inwarecheck" ||
+      this.pageType == "outwarecheck"
+    ) {
+      this.isTop = "on";
+    }
   },
   methods: {
     // scancodestorage: function() {
@@ -669,57 +679,53 @@ export default {
     //仓库pickerchange
     //通过type和id获取所有的设备id
     getAllId() {
-		let type='';
-		if(this.pageType=='in'){
-			type="待入库"
-		}
-		else if(this.pageType=='out'){
-			type="待出库"
-		}
-		else if(this.pageType=='incheck'||this.pageType=='outcheck'){
-			type="待检验"
-		}
-		else{
-			type='';
-		}
-		console.log(type,'type')
-		if(type){
-			 let data = {
-				type:type,
-				id:this.curId
-			};
-			this.$api
-				.getAllIdByType(data)
-				.then((res) => {
-				console.log(res);
-				if (res.code == 200) {
-					this.allIdArr=res.result
-				}
-				// 获得数据
-				})
-				.catch((res) => {
-				// 失败进行的操作
-				});
-		}
-     
+      let type = "";
+      if (this.pageType == "in") {
+        type = "待入库";
+      } else if (this.pageType == "out") {
+        type = "待出库";
+      } else if (this.pageType == "incheck" || this.pageType == "outcheck") {
+        type = "待检验";
+      } else {
+        type = "";
+      }
+      console.log(type, "type");
+      if (type) {
+        let data = {
+          type: type,
+          id: this.curId,
+        };
+        this.$api
+          .getAllIdByType(data)
+          .then((res) => {
+            console.log(res);
+            if (res.code == 200) {
+              this.allIdArr = res.result;
+            }
+            // 获得数据
+          })
+          .catch((res) => {
+            // 失败进行的操作
+          });
+      }
     },
     //获取具体数据
     getData(init) {
-		uni.showLoading({
-			title: '加载中'
-		});
+      uni.showLoading({
+        title: "加载中",
+      });
       if (init) {
         this.dataList = [];
       }
       if (this.pageType == "in") {
         uni.setNavigationBarTitle({
-          title: "入库设备清单", //页面标题为路由参数
+          title: "待入库设备清单", //页面标题为路由参数
         });
         let data = {
           pageNo: this.pageNo,
           pageSize: this.pageSize,
           id: this.curId,
-          // isstorage:'1'
+          isstorage:'1'
         };
         this.$api
           .getInEquBillData(data)
@@ -733,8 +739,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
-			  this.showContent=true;
-			  uni.hideLoading()
+              this.showContent = true;
+              uni.hideLoading();
             }
             // 获得数据
           })
@@ -744,7 +750,7 @@ export default {
       }
       if (this.pageType == "out") {
         uni.setNavigationBarTitle({
-          title: "出库设备清单", //页面标题为路由参数
+          title: "待出库设备清单", //页面标题为路由参数
         });
         let data = {
           pageNo: this.pageNo,
@@ -764,8 +770,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
-			  this.showContent=true;
-			  uni.hideLoading()
+              this.showContent = true;
+              uni.hideLoading();
             }
             // 获得数据
           })
@@ -795,8 +801,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
-			  this.showContent=true;
-			  uni.hideLoading()
+              this.showContent = true;
+              uni.hideLoading();
             }
             // 获得数据
           })
@@ -826,8 +832,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
-			  this.showContent=true;
-			  uni.hideLoading()
+              this.showContent = true;
+              uni.hideLoading();
             }
             // 获得数据
           })
@@ -857,8 +863,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
-			  this.showContent=true;
-			  uni.hideLoading()
+              this.showContent = true;
+              uni.hideLoading();
             }
             // 获得数据
           })
@@ -888,8 +894,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
-			  this.showContent=true;
-			  uni.hideLoading()
+              this.showContent = true;
+              uni.hideLoading();
             }
             // 获得数据
           })
@@ -897,7 +903,7 @@ export default {
             // 失败进行的操作
           });
       }
-	   if (this.pageType == "inwarecheck") {
+      if (this.pageType == "inwarecheck") {
         uni.setNavigationBarTitle({
           title: "入库设备检验清单", //页面标题为路由参数
         });
@@ -918,8 +924,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
-			  this.showContent=true;
-			  uni.hideLoading()
+              this.showContent = true;
+              uni.hideLoading();
             }
             // 获得数据
           })
@@ -927,7 +933,7 @@ export default {
             // 失败进行的操作
           });
       }
-	  if (this.pageType == "outwarecheck") {
+      if (this.pageType == "outwarecheck") {
         uni.setNavigationBarTitle({
           title: "出库设备检验清单", //页面标题为路由参数
         });
@@ -948,8 +954,8 @@ export default {
 
               this.pages = res.result.pages;
               this.dataList = list;
-			  this.showContent=true;
-			  uni.hideLoading()
+              this.showContent = true;
+              uni.hideLoading();
             }
             // 获得数据
           })
@@ -983,123 +989,120 @@ export default {
     saoma() {
       let that = this;
       uni.scanCode({
-      	onlyFromCamera: true,
-      	autoDecodeCharset:true,
-      	scanType: ['barCode'],
-      	success: function (res) {
-      		that.codeResult=res.result;
-      		let data={
-      			number:res.result
-      			// isstorage:'1'
-      		}
-      		that.$api.getEquipDataByNum(data).then(res => {
-      			console.log(res)
-      			if (res.code == 200) {
-					let id=res.result[0].id;
-					let isBillId=false;
-					let allIdArr=that.allIdArr;
-					console.log(allIdArr)
-					if(allIdArr.length){
-						for(let i =0;i<allIdArr.length;i++){
-							if(id==allIdArr[i]){
-								
-								isBillId=true;
-								break;
-							}
-						}
-					}
-					else{
-						uni.showToast({
-							title: "您扫描的设备不在此清单中~",
-							icon: "none",
-							duration: 2000,
-						});
-					}
-					if(isBillId){
-						that.selectEquip = res.result[0];
-						that.showTk();
-					}
-					else{
-						uni.showToast({
-							title: "您扫描的设备不在此清单中~",
-							icon: "none",
-							duration: 2000,
-						});
-					}
-					
-				}
-				else{
-					uni.showToast({
-							title: "扫码错误，请重试1",
-							icon: "none",
-							duration: 2000,
-						});
-				}
-      		// 获得数据
-      		}).catch(res => {
-      		　　// 失败进行的操作
-      			// uni.showToast({
-      			// 	title: '扫码失败，请重试！',
-      			// 	duration: 2000
-      			// });
-      		})
-
-      	}
+        onlyFromCamera: true,
+        autoDecodeCharset: true,
+        scanType: ["barCode"],
+        success: function (res) {
+          that.codeResult = res.result;
+          let data = {
+            number: res.result,
+            // isstorage:'1'
+          };
+          that.$api
+            .getEquipDataByNum(data)
+            .then((res) => {
+              console.log(res);
+              if (res.code == 200) {
+                let id = res.result.id;
+                let isBillId = false;
+                let allIdArr = that.allIdArr;
+                console.log(allIdArr);
+                if (allIdArr.length) {
+                  for (let i = 0; i < allIdArr.length; i++) {
+                    if (id == allIdArr[i]) {
+                      isBillId = true;
+                      break;
+                    }
+                  }
+                } else {
+                  uni.showToast({
+                    title: "您扫描的设备不在此清单中~",
+                    icon: "none",
+                    duration: 2000,
+                  });
+                }
+                if (isBillId) {
+                  that.selectEquip = res.result;
+                  that.showTk();
+                } else {
+                  uni.showToast({
+                    title: "您扫描的设备不在此清单中~",
+                    icon: "none",
+                    duration: 2000,
+                  });
+                }
+              } else {
+                uni.showToast({
+                  title: "扫码错误，请重试1",
+                  icon: "none",
+                  duration: 2000,
+                });
+              }
+              // 获得数据
+            })
+            .catch((res) => {
+              // 失败进行的操作
+              // uni.showToast({
+              // 	title: '扫码失败，请重试！',
+              // 	duration: 2000
+              // });
+            });
+        },
       });
-    //   let data = {
-    //     number: "1651594456826422",
-    //     // isstorage:'1'
-    //   };
-    //   that.$api
-    //     .getEquipDataByNum(data)
-    //     .then((res) => {
-    //       console.log(res);
-    //       if (res.code == 200) {
-	// 		  let id=res.result[0].id;
-	// 		  let isBillId=false;
-	// 		let allIdArr=this.allIdArr;
-	// 		if(allIdArr.length){
-	// 			for(let i =0;i<allIdArr.length;i++){
-	// 				if(id==allIdArr[i]){
-						
-	// 					isBillId=true;
-	// 					break;
-	// 				}
-	// 			}
-	// 		}
-	// 		else{
-	// 			uni.showToast({
-	// 				title: "您扫描的设备不在此清单中~",
-	// 				icon: "none",
-	// 				duration: 2000,
-	// 			});
-	// 		}
-	// 		if(isBillId){
-	// 			this.selectEquip = res.result[0];
-    //         	this.showTk();
-	// 		}
-	// 		else{
-	// 			uni.showToast({
-	// 				title: "您扫描的设备不在此清单中~",
-	// 				icon: "none",
-	// 				duration: 2000,
-	// 			});
-	// 		}
-            
-    //       }
-		 
-	// 	  else{
-	// 		  uni.showToast({
-	// 				title: "扫码错误，请重试",
-	// 				icon: "none",
-	// 				duration: 2000,
-	// 			});
-	// 	  }
-    //       // 获得数据
-    //     })
-    //     .catch((res) => {
-    //       // 失败进行的操作
-    //     });
+      //   let data = {
+      //     number: "1651594456826422",
+      //     // isstorage:'1'
+      //   };
+      //   that.$api
+      //     .getEquipDataByNum(data)
+      //     .then((res) => {
+      //       console.log(res);
+      //       if (res.code == 200) {
+      // 		  let id=res.result.id;
+      // 		  let isBillId=false;
+      // 		let allIdArr=this.allIdArr;
+      // 		if(allIdArr.length){
+      // 			for(let i =0;i<allIdArr.length;i++){
+      // 				if(id==allIdArr[i]){
+
+      // 					isBillId=true;
+      // 					break;
+      // 				}
+      // 			}
+      // 		}
+      // 		else{
+      // 			uni.showToast({
+      // 				title: "您扫描的设备不在此清单中~",
+      // 				icon: "none",
+      // 				duration: 2000,
+      // 			});
+      // 		}
+      // 		if(isBillId){
+      // 			this.selectEquip = res.result;
+      //         	this.showTk();
+      // 		}
+      // 		else{
+      // 			uni.showToast({
+      // 				title: "您扫描的设备不在此清单中~",
+      // 				icon: "none",
+      // 				duration: 2000,
+      // 			});
+      // 		}
+
+      //       }
+
+      // 	  else{
+      // 		  uni.showToast({
+      // 				title: "扫码错误，请重试",
+      // 				icon: "none",
+      // 				duration: 2000,
+      // 			});
+      // 	  }
+      //       // 获得数据
+      //     })
+      //     .catch((res) => {
+      //       // 失败进行的操作
+      //     });
     },
     selectEquipData(item) {
       this.selectEquip = item;
@@ -1268,77 +1271,61 @@ export default {
     },
     //待出库弹窗点击完成
     submitOutWare() {
-      if (this.outWareText == "") {
-        uni.showToast({
-          title: "请输入出库说明",
-          icon: "none",
-          duration: 2000,
+      let id = this.selectEquip.id;
+      let data = {
+        id: id,
+        stockremovalexplain: this.outWareText,
+      };
+      this.$api
+        .submitOutWare(data)
+        .then((res) => {
+          if (res.code == 200) {
+            uni.showToast({
+              title: "操作成功！",
+              duration: 2000,
+            });
+            this.tkshow2 = false;
+            this.tkSuccessShow = true;
+            this.getData(true);
+          }
+          // 获得数据
+        })
+        .catch((res) => {
+          // 失败进行的操作
         });
-      } else {
-        let id = this.selectEquip.id;
-        let data = {
-          id: id,
-          stockremovalexplain: this.outWareText,
-        };
-        this.$api
-          .submitOutWare(data)
-          .then((res) => {
-            if (res.code == 200) {
-              uni.showToast({
-                title: "操作成功！",
-                duration: 2000,
-              });
-              this.tkshow2 = false;
-              this.tkSuccessShow = true;
-              this.getData(true);
-            }
-            // 获得数据
-          })
-          .catch((res) => {
-            // 失败进行的操作
-          });
-      }
     },
     //待入库和待出库弹窗点击完成
     submitCheckWare() {
-      if (this.outWareText == "" && this.curRadio == 0) {
-        uni.showToast({
-          title: "请输入说明",
-          icon: "none",
-          duration: 2000,
-        });
+      let type = "";
+      if (this.pageType == "incheck") {
+        type = "入库检验";
       } else {
-        let type = "";
-        if (this.pageType == "incheck") {
-          type = "入库检验";
-        } else {
-          type = "出库检验";
-        }
-        let id = this.selectEquip.id;
-        let data = {
-          id: id,
-          type: type,
-          inspectionstatus: this.curRadio == 0 ? "检验不通过" : "检验通过",
-          reason: this.outWareText,
-        };
-        this.$api
-          .submitCheckWare(data)
-          .then((res) => {
-            if (res.code == 200) {
-              uni.showToast({
-                title: "操作成功！",
-                duration: 2000,
-              });
-              this.tkshow3 = false;
-              this.tkSuccessShow = true;
-              this.getData(true);
-            }
-            // 获得数据
-          })
-          .catch((res) => {
-            // 失败进行的操作
-          });
+        type = "出库检验";
       }
+      let id = this.selectEquip.id;
+      let data = {
+        id: id,
+        type: type,
+        inspectionstatus: this.curRadio == 0 ? "检验不通过" : "检验通过",
+        reason: this.outWareText,
+      };
+      this.$api
+        .submitCheckWare(data)
+        .then((res) => {
+          if (res.code == 200) {
+            uni.showToast({
+              title: "操作成功！",
+              duration: 2000,
+            });
+            this.tkshow3 = false;
+            this.tkSuccessShow = true;
+            this.getData(true);
+          }
+          // 获得数据
+        })
+        .catch((res) => {
+          // 失败进行的操作
+        });
     },
   },
 };
@@ -1617,7 +1604,7 @@ export default {
     color: #666666;
     font-size: 26rpx;
     line-height: 56rpx;
-	
+
     .item1 {
       width: 50%;
       height: 56rpx;
@@ -1729,14 +1716,14 @@ export default {
     font-size: 30rpx;
   }
 }
-.scrollview{
-	position: fixed;
-	top:300rpx;
-	left:0;
-	right:0;
-	bottom:0;
-	&.on{
-		top:0;
-	}
+.scrollview {
+  position: fixed;
+  top: 300rpx;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  &.on {
+    top: 0;
+  }
 }
 </style>
