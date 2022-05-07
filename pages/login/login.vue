@@ -70,8 +70,8 @@
 			login(){
 				var that = this
 				let loginParams = {
-					username: that.username||'admin',
-					password: that.password||'123456',
+					username: that.username,
+					password: that.password,
 					captcha: that.inputCode,
 					checkKey: that.currdatetime,
 					remember_me: false,

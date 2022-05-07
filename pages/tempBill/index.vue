@@ -68,7 +68,7 @@
 				<view class="item bg2" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
 					<view class="item_top fix">
 						<view class="num fl">{{item.name}}</view>
-						<view class="note fr">{{item.storagestatus}}</view>
+						<view class="note fr">{{item.stockremovalstatus}}</view>
 					</view>
 					<view class="item_bot">
 						<!-- <view class="item1 fix">
@@ -188,7 +188,7 @@
 				<view class="item bg5" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
 					<view class="item_top fix">
 						<view class="num fl">{{item.name}}</view>
-						<view class="note fr">{{item.storagestatus}}</view>
+						<view class="note fr">{{item.stockremovalstatus}}</view>
 					</view> 
 					<view class="item_bot">
 						<!-- <view class="item1 fix">
@@ -220,7 +220,7 @@
 					<view  @click="toEquBill(item.id)">
 						<view class="item_top fix">
 							<view class="num fl">{{item.name}}</view>
-							<view class="note fr">{{item.storagestatus}}</view>
+							<view class="note fr">{{item.inspectionstatus}}</view>
 						</view> 
 						<view class="item_bot">
 							<!-- <view class="item1 fix">
@@ -260,7 +260,7 @@
 					<view @click="toEquBill(item.id)">
 						<view class="item_top fix">
 							<view class="num fl">{{item.name}}</view>
-							<view class="note fr">{{item.storagestatus}}</view>
+							<view class="note fr">{{item.inspectionstatus}}</view>
 						</view> 
 						<view class="item_bot">
 							<!-- <view class="item1 fix">
@@ -386,8 +386,7 @@
 		onLoad(options) {
 			this.pageNo=1;
 			this.pageType=options.type;
-			this.getListData();
-			this.getAllUser();
+			
 		},
 		onShow(){
 			this.getListData();

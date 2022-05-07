@@ -1022,7 +1022,9 @@ export default {
                   });
                 }
                 if (isBillId) {
-                  that.selectEquip = res.result;
+                  let selectData=res.result;
+                  selectData.facilityname=selectData.name,
+                  that.selectEquip = selectData;
                   that.showTk();
                 } else {
                   uni.showToast({
@@ -1049,60 +1051,60 @@ export default {
             });
         },
       });
-      //   let data = {
-      //     number: "1651594456826422",
-      //     // isstorage:'1'
-      //   };
-      //   that.$api
-      //     .getEquipDataByNum(data)
-      //     .then((res) => {
-      //       console.log(res);
-      //       if (res.code == 200) {
-      // 		  let id=res.result.id;
-      // 		  let isBillId=false;
-      // 		let allIdArr=this.allIdArr;
-      // 		if(allIdArr.length){
-      // 			for(let i =0;i<allIdArr.length;i++){
-      // 				if(id==allIdArr[i]){
+        // let data = {
+        //   number: "1651594456826422",
+        //   // isstorage:'1'
+        // };
+        // that.$api
+        //   .getEquipDataByNum(data)
+        //   .then((res) => {
+        //     console.log(res);
+        //     if (res.code == 200) {
+      	// 	  let id=res.result.id;
+      	// 	  let isBillId=false;
+      	// 	let allIdArr=this.allIdArr;
+      	// 	if(allIdArr.length){
+      	// 		for(let i =0;i<allIdArr.length;i++){
+      	// 			if(id==allIdArr[i]){
 
-      // 					isBillId=true;
-      // 					break;
-      // 				}
-      // 			}
-      // 		}
-      // 		else{
-      // 			uni.showToast({
-      // 				title: "您扫描的设备不在此清单中~",
-      // 				icon: "none",
-      // 				duration: 2000,
-      // 			});
-      // 		}
-      // 		if(isBillId){
-      // 			this.selectEquip = res.result;
-      //         	this.showTk();
-      // 		}
-      // 		else{
-      // 			uni.showToast({
-      // 				title: "您扫描的设备不在此清单中~",
-      // 				icon: "none",
-      // 				duration: 2000,
-      // 			});
-      // 		}
+      	// 				isBillId=true;
+      	// 				break;
+      	// 			}
+      	// 		}
+      	// 	}
+      	// 	else{
+      	// 		uni.showToast({
+      	// 			title: "您扫描的设备不在此清单中~",
+      	// 			icon: "none",
+      	// 			duration: 2000,
+      	// 		});
+      	// 	}
+      	// 	if(isBillId){
+      	// 		this.selectEquip = res.result;
+        //       	this.showTk();
+      	// 	}
+      	// 	else{
+      	// 		uni.showToast({
+      	// 			title: "您扫描的设备不在此清单中~",
+      	// 			icon: "none",
+      	// 			duration: 2000,
+      	// 		});
+      	// 	}
 
-      //       }
+        //     }
 
-      // 	  else{
-      // 		  uni.showToast({
-      // 				title: "扫码错误，请重试",
-      // 				icon: "none",
-      // 				duration: 2000,
-      // 			});
-      // 	  }
-      //       // 获得数据
-      //     })
-      //     .catch((res) => {
-      //       // 失败进行的操作
-      //     });
+      	//   else{
+      	// 	  uni.showToast({
+      	// 			title: "扫码错误，请重试",
+      	// 			icon: "none",
+      	// 			duration: 2000,
+      	// 		});
+      	//   }
+        //     // 获得数据
+        //   })
+        //   .catch((res) => {
+        //     // 失败进行的操作
+        //   });
     },
     selectEquipData(item) {
       this.selectEquip = item;
