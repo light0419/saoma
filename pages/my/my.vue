@@ -42,7 +42,7 @@
 			</view>
 		</view>
 		<view class="my_bot">
-			<view class="item fix">
+			<!-- <view class="item fix">
 				<view class="icon fl">
 					<image src="../../static/xtb1.png" mode="widthFix"></image>
 				</view>
@@ -52,8 +52,8 @@
 				<view class="jiantou fr">
 					<image src="../../static/huijian.png" mode="widthFix"></image>
 				</view>
-			</view>
-			<view class="item fix">
+			</view> -->
+			<view class="item fix" @click="toUpdatePassword">
 				<view class="icon fl">
 					<image src="../../static/xtb2.png" mode="widthFix"></image>
 				</view>
@@ -108,6 +108,11 @@
 			// 		url:"../tempBill/index?type="+str
 			// 	})
 			// },
+			toUpdatePassword(){
+				uni.navigateTo({
+					url:"../updatePassword/index"
+				})
+			}
 			
 		}
 	}

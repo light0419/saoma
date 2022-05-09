@@ -48,7 +48,7 @@
 						<image src="../../static/sbjy@2x.png" mode=""></image>
 					</view>
 				</navigator>
-				<navigator class="main2-list" url="../homeModule/securityObject" hover-class="none">
+				<navigator class="main2-list"  @click="toBill('waitcheck')" url="../homeModule/securityObject" hover-class="none">
 					<view class="main2-list-text">
 						<text>待盘点单</text>
 						<text style="color: #999999;font-size: 24rpx;margin-top: 23rpx;">查看待盘点单</text>
@@ -66,7 +66,7 @@
 						<image src="../../static/xcgl@2x.png" mode=""></image>
 					</view>
 				</navigator>
-				<navigator class="main2-list" url="../homeModule/theApplication" hover-class="none">
+				<navigator class="main2-list" @click="toBill('alreadycheck')" url="../homeModule/theApplication" hover-class="none">
 					<view class="main2-list-text">
 						<text>盘点管理</text>
 						<text style="color: #999999;font-size: 24rpx;margin-top: 23rpx;">线上快速盘点</text>
@@ -77,6 +77,34 @@
 				</navigator>
 			</view>
 		</view>
+		<view class="main2-box light_main1">
+			<view class="main2-box-tit">
+				<!-- <span></span> -->
+				<text>资产统计</text>
+			</view>
+			<view class="light_m1">
+				<view class="item fix">
+					<view class="item1 fl">
+						<view class="num">{{storagefacilitysum}}<span>个</span></view>
+						<view class="tit">库存设备数量</view>
+					</view>
+					<view class="item1 fl">
+						<view class="num">{{leasefacilitysum}}<span>个</span></view>
+						<view class="tit">已租出设备数量</view>
+					</view>
+				</view>
+				<view class="item fix">
+					<view class="item1 fl">
+						<view class="num">{{equipmentoriginalvalues}}<span>万元</span></view>
+						<view class="tit">库存设备原值</view>
+					</view>
+					<view class="item1 fl">
+						<view class="num">{{leaseequipmentoriginalvalues}}<span>万元</span></view>
+						<view class="tit">已租出设备原值</view>
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -84,11 +112,28 @@
 	export default {
 		data() {
 			return {
-				
+				equipmentoriginalvalues:0,
+				leaseequipmentoriginalvalues:0,
+				leasefacilitysum: 0,
+				storagefacilitysum: 0
 			}
 		},
 		onLoad() {
 
+		},
+		onShow(){
+			this.$api.getIndexNumber().then(res => {
+				if(res.code==200){
+					this.equipmentoriginalvalues=res.result.equipmentoriginalvalues
+					this.leaseequipmentoriginalvalues=res.result.leaseequipmentoriginalvalues
+					this.leasefacilitysum=res.result.leasefacilitysum
+					this.storagefacilitysum=res.result.storagefacilitysum
+
+				}
+				// 获得数据 
+			}).catch(res => {
+			　　// 失败进行的操作
+			})
 		},
 		methods: {
 			//去清单页
@@ -207,8 +252,8 @@
 		left: -20rpx;
 	}
 	.main2{
-		padding: 0rpx 45rpx;
-		margin-top: 20rpx;
+		padding: 0rpx 45rpx 30rpx;
+		margin-top:-30rpx;
 		box-sizing: border-box;
 		background: #fff;
 		overflow: hidden;
@@ -247,4 +292,47 @@
 	.main2-list-text:first-child{
 		font-size: 30rpx;
 	}
+	.light_main1{
+		border-top:solid 10rpx #f2f2f2;
+		padding-bottom: 60rpx;
+	}
+	.light_m1 .item{
+		border-radius: 10rpx;
+		background-color: rgb(255, 255, 255);
+		box-shadow: 0rpx 2rpx 15rpx 0rpx rgba(4, 0, 0, 0.06);
+		width: 660rpx;
+		margin-left: auto;
+		margin-right: auto;
+		padding:50rpx 0 ;
+		margin-bottom: 24rpx;
+	}
+		.light_m1 .item .item1{
+			width:50%;
+			position: relative;
+			text-align: center;
+			
+		}
+		.light_m1 .item .item1:nth-child(1):before{
+			content:'';
+			width:2rpx;
+			background: rgb(153, 153, 153);
+			position: absolute;
+			height: 62rpx;
+			top:50%;
+			margin-top: -31rpx;
+			left:100%;
+			opacity: 0.5;
+		}
+		.light_m1 .item .item1 .num{
+			color:#666666;
+			font-size:36rpx;
+		}
+		.light_m1 .item .item1 .num span{
+			margin-left: 10rpx;
+			font-size:24rpx;
+		}
+		.light_m1 .item .item1 .tit{
+			color:#666666;
+			font-size:26rpx;
+		}
 </style>

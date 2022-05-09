@@ -13,6 +13,7 @@
       <image src="../../static/saoma.png" mode="widthFix"></image>
       <view class="word" v-if="pageType == 'in'"> 点击扫码入库 </view>
       <view class="word" v-else-if="pageType == 'out'"> 点击扫码出库 </view>
+      <view class="word" v-else-if="pageType == 'waitcheck'"> 点击扫码盘点 </view>
       <view class="word" v-else> 点击扫码检验 </view>
     </view>
     <view class="nodata" v-if="dataList.length == 0">
@@ -27,9 +28,10 @@
       :class="isTop"
       lower-threshold="100"
       @scrolltolower="onScrollToLower"
-      :refresher-enabled="false"
+      :refresher-enabled="true"
+       refresher-threshold="80" 
       refresher-background="#F6F6FC"
-      :refresher-triggered="isRefreshing"
+      @refresherpulling='onRefresherPulling' 
     >
       <!-- 
       @refresherpulling="onRefresherPulling" -->
@@ -365,6 +367,45 @@
           </view>
         </view>
       </view>
+      <view class="main auto" v-if="pageType == 'waitcheck'||pageType=='alreadycheck'">
+        <view class="item rel" v-for="(item, index) in dataList" :key="index" @click="selectEquipData(item)">
+          <view class="item_abs abs">{{ item.librarystatus }}</view>
+          <view class="item_tit fix">
+            <view class="tit fl">
+              <image src="../../static/icon1.png" mode="widthFix"></image>
+              {{ item.facility }}
+            </view>
+            <!-- <view class="note fr">{{ item.warehouse }}</view> -->
+          </view>
+          <view class="item_mid fix">
+            <view class="item1 fl">
+              设备编号：<view class="vmid">{{ item.numeration }}</view>
+            </view>
+            <view class="item2 fl">
+              品牌：<view class="vmid">{{ item.brand }}</view>
+            </view>
+            <view class="item3 fl">
+              规格型号：<view class="vmid">{{ item.specifications }}</view>
+            </view>
+
+            <view class="item1 fl">
+              使用寿命（年）：<view class="vmid">{{ item.servicelife }}</view>
+            </view>
+            <view class="item2 fl">
+              设备原值：<view class="vmid">{{
+                item.equipmentoriginalvalue
+              }}</view>
+            </view>
+
+            <view class="item1 fl">
+              登记时间：<view class="vmid">{{ item.registrationtime }}</view>
+            </view>
+            <view class="item2 fl">
+              计量单位：<view class="vmid">{{ item.measuringunit }}</view>
+            </view>
+          </view>
+        </view>
+      </view>
     </scroll-view>
     <!-- <view class="main_bot">
 			<view class="main_btn" v-if="pageType=='in'">
@@ -509,6 +550,29 @@
         <view class="btn2 fr" @click="saoma">扫下一个</view>
       </view>
     </view>
+     <view class="tk_saoma4 tk_public" v-if="tkshow4">
+      <view class="tk_close" @click="hideTk"></view>
+      <view class="tit">
+        <image src="../../static/word_smcg.png" mode="widthFix"></image>
+      </view>
+       <view class="cont">
+        <view class="select" >
+          <picker
+            class="picker"
+            @change="(e) => bindPickerChange1(e)"
+            :value="waitCheckIndex"
+            :range="waitCheckList"
+            :range-key="'label'"
+          >
+            <view class="uni-input">{{ waitCheckList[waitCheckIndex] }}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="bot fix">
+        <view class="btn1 fl" @click="submitWaitCheck">完成</view>
+        <view class="btn2 fr" @click="saoma">扫下一个</view>
+      </view>
+    </view>
     <view class="tk_succees tk_public" v-if="tkSuccessShow">
       <view v-if="pageType == 'in'">
         <view class="tk_close" @click="hideTk"></view>
@@ -577,6 +641,21 @@
           确认出库检验提交完毕!
         </view>
       </view>
+      <view v-if="pageType == 'waitcheck'">
+        <view class="tk_close" @click="hideTk"></view>
+        <view class="tit">
+          <image src="../../static/word_pdwc.png" mode="widthFix"></image>
+        </view>
+        <view class="cont">
+          <img
+            src="../../static/duigou.png"
+            mode="widthFix"
+            class="vmid"
+            alt=""
+          />
+          确认盘点提交完毕！
+        </view>
+      </view>
       <view class="btn auto" @click="hideTk"> 完成 </view>
     </view>
   </view>
@@ -606,6 +685,7 @@ export default {
       tkshow1: false,
       tkshow2: false,
       tkshow3: false,
+      tkshow4: false,
       isTop: "",
       array: [
         {
@@ -626,6 +706,8 @@ export default {
         },
       ],
       showContent: false,
+      waitCheckList:['已盘点','损坏','报废'],
+      waitCheckIndex:0,
       wareList: [
         {
           arrIndex: 0,
@@ -662,6 +744,7 @@ export default {
       this.pageType == "inware" ||
       this.pageType == "outware" ||
       this.pageType == "inwarecheck" ||
+      this.pageType == "alreadycheck" ||
       this.pageType == "outwarecheck"
     ) {
       this.isTop = "on";
@@ -677,6 +760,10 @@ export default {
     // 	console.log(this.searchTxt)
     // }
     //仓库pickerchange
+    bindPickerChange1(e){
+      console.log(e)
+      this.waitCheckIndex=e.detail.value
+    },
     //通过type和id获取所有的设备id
     getAllId() {
       let type = "";
@@ -716,6 +803,7 @@ export default {
       });
       if (init) {
         this.dataList = [];
+        this.pageNo=1;
       }
       if (this.pageType == "in") {
         uni.setNavigationBarTitle({
@@ -732,6 +820,7 @@ export default {
           .then((res) => {
             console.log(res);
             if (res.code == 200) {
+              this.isRefreshing=false;
               let list = this.dataList;
               res.result.records.forEach((item, index) => {
                 list.push(item);
@@ -763,6 +852,7 @@ export default {
           .then((res) => {
             console.log(res);
             if (res.code == 200) {
+              this.isRefreshing=false;
               let list = this.dataList;
               res.result.records.forEach((item, index) => {
                 list.push(item);
@@ -794,6 +884,7 @@ export default {
           .then((res) => {
             console.log(res);
             if (res.code == 200) {
+              this.isRefreshing=false;
               let list = this.dataList;
               res.result.records.forEach((item, index) => {
                 list.push(item);
@@ -825,6 +916,7 @@ export default {
           .then((res) => {
             console.log(res);
             if (res.code == 200) {
+              this.isRefreshing=false;
               let list = this.dataList;
               res.result.records.forEach((item, index) => {
                 list.push(item);
@@ -856,6 +948,7 @@ export default {
           .then((res) => {
             console.log(res);
             if (res.code == 200) {
+              this.isRefreshing=false;
               let list = this.dataList;
               res.result.records.forEach((item, index) => {
                 list.push(item);
@@ -887,6 +980,7 @@ export default {
           .then((res) => {
             console.log(res);
             if (res.code == 200) {
+              this.isRefreshing=false;
               let list = this.dataList;
               res.result.records.forEach((item, index) => {
                 list.push(item);
@@ -917,6 +1011,7 @@ export default {
           .then((res) => {
             console.log(res);
             if (res.code == 200) {
+              this.isRefreshing=false;
               let list = this.dataList;
               res.result.records.forEach((item, index) => {
                 list.push(item);
@@ -947,6 +1042,44 @@ export default {
           .then((res) => {
             console.log(res);
             if (res.code == 200) {
+              this.isRefreshing=false;
+              let list = this.dataList;
+              res.result.records.forEach((item, index) => {
+                list.push(item);
+              });
+
+              this.pages = res.result.pages;
+              this.dataList = list;
+              this.showContent = true;
+              uni.hideLoading();
+            }
+            // 获得数据
+          })
+          .catch((res) => {
+            // 失败进行的操作
+          });
+      }
+       if (this.pageType == "waitcheck"||this.pageType == "alreadycheck") {
+        
+        uni.setNavigationBarTitle({
+          title: "盘点设备清单", //页面标题为路由参数
+        });
+        let ismonad=2;
+        if(this.pageType=='waitcheck'){
+          ismonad=1;
+        }
+        let data = {
+          pageNo: this.pageNo,
+          pageSize: this.pageSize,
+          id: this.curId,
+          ismonad:ismonad
+        };
+        this.$api
+          .getCheckDetails(data)
+          .then((res) => {
+            console.log(res);
+            if (res.code == 200) {
+              this.isRefreshing=false;
               let list = this.dataList;
               res.result.records.forEach((item, index) => {
                 list.push(item);
@@ -965,12 +1098,13 @@ export default {
       }
     },
     onRefresherPulling() {
+      let that=this;
       if (!this.isRefreshing) {
         this.isRefreshing = true;
 
-        setTimeout(() => {
-          this.isRefreshing = false;
-        }, 2000);
+       setTimeout(function(){
+						that.getData(true);
+					},1000)
       }
     },
 
@@ -983,7 +1117,7 @@ export default {
         console.log(11);
         this.pageNo = this.pageNo + 1;
 
-        this.getListData();
+        this.getData();
       }
     },
     saoma() {
@@ -994,8 +1128,23 @@ export default {
         scanType: ["barCode"],
         success: function (res) {
           that.codeResult = res.result;
+          let pageType=this.pageType;
+          let type='';
+          if(pageType=='in'){
+            type='待入库'
+          }
+          else if(pageType=='out'){
+            type='待出库'
+          }
+          else if(pageType=='waitcheck'){
+            type='待盘点'
+          }
+          else{
+            type='待检验'
+          }
           let data = {
             number: res.result,
+            type:type
             // isstorage:'1'
           };
           that.$api
@@ -1110,6 +1259,7 @@ export default {
       this.selectEquip = item;
       this.wareList.length = 1;
       this.wareList[0].arrIndex = 0;
+      if(item.librarystatus=='已盘点') return;
       this.showTk();
     },
     showTk() {
@@ -1124,6 +1274,10 @@ export default {
       if (this.pageType == "incheck" || this.pageType == "outcheck") {
         this.tkshow = true;
         this.tkshow3 = true;
+      }
+       if (this.pageType == "waitcheck" ) {
+        this.tkshow = true;
+        this.tkshow4 = true;
       }
     },
     hideTk() {
@@ -1320,6 +1474,34 @@ export default {
               duration: 2000,
             });
             this.tkshow3 = false;
+            this.tkSuccessShow = true;
+            this.getData(true);
+          }
+          // 获得数据
+        })
+        .catch((res) => {
+          // 失败进行的操作
+        });
+    },
+    //待盘点单弹窗点击完成
+      // 待入库弹窗点击完成
+    submitWaitCheck() {
+      
+      let id = this.selectEquip.id;
+      let data = {
+        id: id,
+        registrationtime: this.selectEquip.registrationtime,
+        monadstatus:this.waitCheckList[this.waitCheckIndex]
+      };
+      this.$api
+        .submitWaitCheck(data)
+        .then((res) => {
+          if (res.code == 200) {
+            uni.showToast({
+              title: "操作成功！",
+              duration: 2000,
+            });
+            this.tkshow4 = false;
             this.tkSuccessShow = true;
             this.getData(true);
           }
@@ -1639,6 +1821,61 @@ export default {
     margin: 0 auto;
     margin-top: 30rpx;
     padding: 15rpx 25rpx;
+  }
+  .bot {
+    padding-left: 55rpx;
+    padding-right: 55rpx;
+    padding-top: 70rpx;
+    .btn1 {
+      border-radius: 20rpx;
+      background-color: rgb(242, 242, 242);
+      width: 280rpx;
+      height: 72rpx;
+      text-align: center;
+      line-height: 72rpx;
+      color: #666666;
+      font-size: 30rpx;
+    }
+    .btn2 {
+      border-radius: 20rpx;
+      background-color: #016ba9;
+      width: 280rpx;
+      height: 72rpx;
+      text-align: center;
+      line-height: 72rpx;
+      color: #fff;
+      font-size: 30rpx;
+    }
+  }
+}
+.tk_saoma4 {
+  .tit {
+    text-align: center;
+    padding-top: 77rpx;
+    padding-bottom: 150rpx;
+    image {
+      width: 337rpx;
+      height: 79rpx;
+    }
+  }
+  .cont {
+    padding-left: 55rpx;
+    padding-right: 55rpx;
+    .select {
+      border-radius: 10rpx;
+      background: url(/static/sanjiao.png) no-repeat 95% center
+        rgb(255, 255, 255);
+      box-shadow: 0rpx 5rpx 9.6rpx 0.4rpx rgba(1, 107, 169, 0.33);
+      width: 590rpx;
+      height: 86rpx;
+      margin-bottom: 15rpx;
+
+      .picker {
+        padding-left: 26px;
+        line-height: 86rpx;
+        font-size: 32rpx;
+      }
+    }
   }
   .bot {
     padding-left: 55rpx;

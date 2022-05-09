@@ -99,4 +99,37 @@ api.createInWareBill = params => request.globalRequest('/jeecg-boot/storageinfor
 api.createOutWareBill = params => request.globalRequest('/jeecg-boot/stockremovalinformation/stockRemovalInformation/add', 'POST', params)
 
 
+// 待盘点获取清单
+api.getWaitCheck = params => request.globalRequest('/jeecg-boot/facilityinventoryplanning/facilityInventoryPlanning/listbystatus', 'GET', params)
+
+// 盘点管理清单
+api.getAlreadyCheck = params => request.globalRequest('/jeecg-boot/facilityinventoryplanning/facilityInventoryPlanning/list', 'GET', params)
+
+// 待盘点和盘点管理的盘点设备清单接口
+api.getCheckDetails = params => request.globalRequest('/jeecg-boot/facilityinventoryplanning/facilityInventoryPlanning/queryByMainId', 'GET', params)
+
+
+// 待盘点单弹窗提交
+api.submitWaitCheck = params => request.globalRequest('/jeecg-boot/facilityinventoryplanning/facilityInventoryPlanning/appInventory', 'GET', params)
+
+
+
+// 生成入库检验单
+api.submitInWareCheck = params => request.globalRequest('/jeecg-boot/checkoutinformation/checkoutInformation/add', 'POST', params)
+
+
+// 修改密码
+api.updatePassword = params => request.globalRequest('/jeecg-boot/sys/user/appUpdatePassword', 'GET', params)
+
+// 获取首页数字
+api.getIndexNumber = params => request.globalRequest('/jeecg-boot/index/appindexstatistics', 'GET', params)
+
+
+
+// /jeecg-boot/index/appindexstatistics
+// 传参：username  用户名
+// oldpassword   旧密码
+// password     新密码
+// confirmpassword   确认新密码
+
 export default api

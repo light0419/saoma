@@ -11,7 +11,7 @@
 			<image src="../../static/nodata.png" mode="widthFix"></image>
 			暂无数据
 		</view>
-		<scroll-view v-else scroll-y="true" class="scrollview"  lower-threshold = 100 @scrolltolower='onScrollToLower' :refresher-enabled='false' refresher-background='#F6F6FC'>
+		<scroll-view v-else scroll-y="true" class="scrollview"  lower-threshold = 100 @scrolltolower='onScrollToLower' :refresher-enabled='true' refresher-threshold="80" @refresherpulling='onRefresherPulling' refresher-background='#F6F6FC'>
 			<!-- @refresherpulling='onRefresherPulling'  下拉刷新 -->
 			<!-- <view >
 				 <picker-view v-if="visible" :indicator-style="indicatorStyle" :value="value" @change="bindChange" class="picker-view">
@@ -247,7 +247,7 @@
 					</view>
 					
 					<view class="item_botn" v-if='item.isstock==1'>
-						已入库
+						已生成入库单
 					</view>
 					<view class="item_botn" @click="showTk(item)" v-else>
 						生成入库单
@@ -286,7 +286,7 @@
 						</view>
 					</view>
 					<view class="item_botn" v-if='item.isstockremoval==1'>
-						已出库
+						已生成出库单
 					</view>
 					<view class="item_botn" @click="showTk(item)" v-else>
 						生成出库单
@@ -294,9 +294,86 @@
 				</view>
 				
 			</view>
+			<view class="main" v-if="pageType=='waitcheck'">
+				<view class="item bg1" @click="toEquBill(item.id)" v-for="(item,index) in dataList" :key="index" :data-id="item.id">
+					<view class="item_top fix">
+						<view class="num fl">{{item.name}}</view>
+						<view class="note fr">{{item.monadstatus}}</view>
+					</view>
+					<view class="item_bot">
+						<view class="item1 fix">
+							<view class="name fl">制单人</view>
+							<view class="cont fr">{{item.createBy}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">使用单位</view>
+							<view class="cont fr">{{item.projectdepartment}}</view>
+						</view>
+						<!-- <view class="item1 fix">
+							<view class="name fl">上级单位</view>
+							<view class="cont fr">{{item.sysOrgCode}}</view>
+						</view> -->
+						<view class="item1 fix">
+							<view class="name fl">盘点开始时间</view>
+							<view class="cont fr">{{item.inventoryendtime}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">盘点结束时间</view>
+							<view class="cont fr">{{item.inventorystarttime}}</view>
+						</view>
+						<view class="item1 fix">
+							<view class="name fl">创建时间</view>
+							<view class="cont fr">{{item.createTime}}</view>
+						</view>
+					</view>
+				</view>
+				
+			</view>
+			<view class="main" v-if="pageType=='alreadycheck'">
+				<view class="item bg8"  v-for="(item,index) in dataList" :key="index" :data-id="item.id">
+					<view @click="toEquBill(item.id)">
+						<view class="item_top fix">
+							<view class="num fl">{{item.name}}</view>
+							<view class="note fr">{{item.monadstatus}}</view>
+						</view>
+						<view class="item_bot">
+							<view class="item1 fix">
+								<view class="name fl">制单人</view>
+								<view class="cont fr">{{item.createBy}}</view>
+							</view>
+							<view class="item1 fix">
+								<view class="name fl">使用单位</view>
+								<view class="cont fr">{{item.projectdepartment}}</view>
+							</view>
+							<!-- <view class="item1 fix">
+								<view class="name fl">上级单位</view>
+								<view class="cont fr">{{item.sysOrgCode}}</view>
+							</view> -->
+							<view class="item1 fix">
+								<view class="name fl">盘点开始时间</view>
+								<view class="cont fr">{{item.inventoryendtime}}</view>
+							</view>
+							<view class="item1 fix">
+								<view class="name fl">盘点结束时间</view>
+								<view class="cont fr">{{item.inventorystarttime}}</view>
+							</view>
+							<view class="item1 fix">
+								<view class="name fl">创建时间</view>
+								<view class="cont fr">{{item.createTime}}</view>
+							</view>
+						</view>
+					</view>
+					<view class="item_botn" v-if='item.isstockcheck==1'>
+						已生成入库检验单
+					</view>
+					<view class="item_botn" @click="showTk(item)" v-else>
+						生成入库检验单
+					</view>
+				</view>
+				
+			</view>
 		</scroll-view>
-    <view class="tk_hsbtm" v-if="tkshow" @click="hideTk"></view>
-
+    	<view class="tk_hsbtm" v-if="tkshow" @click="hideTk"></view>
 		<view class="tk_saoma1 tk_public" v-if="tkshow1">
 			<view class="tk_close" @click="hideTk"></view>
 			<view class="tit">
@@ -331,6 +408,19 @@
 				<view class="btn2 auto" @click="submitOutWareCheck">完成</view>
 			</view>
 		</view>
+		<view class="tk_saoma1 tk_public" v-if="tkshow3">
+			<view class="tk_close" @click="hideTk"></view>
+			<view class="tit">
+				<image src="../../static/word_scrkjyd.png" class="imgg1" mode="widthFix"></image>
+			</view>
+			<view class="cont">
+				<view class="note">点击完成生成入库检验单！</view>
+			</view>
+			<view class="bot fix">
+				<view class="btn2 auto" @click="submitInWareCheck1">完成</view>
+			</view>
+		</view>
+		
 	</view>
 </template>
 
@@ -389,6 +479,8 @@
 			
 		},
 		onShow(){
+			this.dataList=[];
+			this.userList=[];
 			this.getListData();
 			this.getAllUser();
 		},
@@ -444,7 +536,7 @@
 							res.result.records.forEach((item,index)=>{
 								list.push(item);
 							})
-							
+							this.isRefreshing=false;
 							this.pages=res.result.pages;
 							this.dataList=list;
 							this.showContent=true;
@@ -470,6 +562,7 @@
 					this.$api.getOutBillData(data).then(res => {
 						console.log(res)
 						if(res.code==200){
+							this.isRefreshing=false;
 							let list=this.dataList;
 							res.result.records.forEach((item,index)=>{
 								list.push(item);
@@ -502,6 +595,7 @@
 					this.$api.getInCheeckBillData(data).then(res => {
 						console.log(res)
 						if(res.code==200){
+							this.isRefreshing=false;
 							let list=this.dataList;
 							res.result.records.forEach((item,index)=>{
 								list.push(item);
@@ -534,6 +628,7 @@
 					this.$api.getOutCheeckBillData(data).then(res => {
 						console.log(res)
 						if(res.code==200){
+							this.isRefreshing=false;
 							let list=this.dataList;
 							res.result.records.forEach((item,index)=>{
 								list.push(item);
@@ -565,6 +660,7 @@
 					this.$api.getInWareData(data).then(res => {
 						console.log(res)
 						if(res.code==200){
+							this.isRefreshing=false;
 							let list=this.dataList;
 							res.result.records.forEach((item,index)=>{
 								list.push(item);
@@ -596,6 +692,7 @@
 					this.$api.getOutWareData(data).then(res => {
 						console.log(res)
 						if(res.code==200){
+							this.isRefreshing=false;
 							let list=this.dataList;
 							res.result.records.forEach((item,index)=>{
 								list.push(item);
@@ -628,6 +725,7 @@
 					this.$api.getInWareCheckData(data).then(res => {
 						console.log(res)
 						if(res.code==200){
+							this.isRefreshing=false;
 							let list=this.dataList;
 							res.result.records.forEach((item,index)=>{
 								list.push(item);
@@ -660,6 +758,72 @@
 					this.$api.getInWareCheckData(data).then(res => {
 						console.log(res)
 						if(res.code==200){
+							this.isRefreshing=false;
+							let list=this.dataList;
+							res.result.records.forEach((item,index)=>{
+								list.push(item);
+							})
+							
+							this.pages=res.result.pages;
+							this.dataList=list;
+							this.showContent=true;
+							uni.hideLoading()
+
+						}
+					   // 获得数据 
+					}).catch(res => {
+					　　// 失败进行的操作
+					})
+				}
+				if(this.pageType=='waitcheck'){
+					uni.setNavigationBarTitle({
+					  title: '待盘点单'   //页面标题为路由参数
+					})
+					let data={
+						pageNo:this.pageNo,
+						pageSize:this.pageSize,
+						column:'createTime',
+						order:'desc',
+						name:this.searchTxt,
+						
+					}
+					this.$api.getWaitCheck(data).then(res => {
+						console.log(res)
+						if(res.code==200){
+							this.isRefreshing=false;
+							let list=this.dataList;
+							res.result.records.forEach((item,index)=>{
+								list.push(item);
+							})
+							
+							this.pages=res.result.pages;
+							this.dataList=list;
+							this.showContent=true;
+							uni.hideLoading()
+
+						}
+					   // 获得数据 
+					}).catch(res => {
+					　　// 失败进行的操作
+					})
+				}
+				if(this.pageType=='alreadycheck'){
+					uni.setNavigationBarTitle({
+					  title: '盘点管理'   //页面标题为路由参数
+					})
+					let data={
+						pageNo:this.pageNo,
+						pageSize:this.pageSize,
+						column:'createTime',
+						order:'desc',
+						name:this.searchTxt,
+						monadstatus:'已盘点'
+						
+					}
+					this.$api.getAlreadyCheck(data).then(res => {
+						console.log(res)
+						if(res.code==200){
+							this.isRefreshing=false;
 							let list=this.dataList;
 							res.result.records.forEach((item,index)=>{
 								list.push(item);
@@ -678,12 +842,15 @@
 				}
 			},
 			onRefresherPulling(){
+				let that=this;
 				if (!this.isRefreshing) {
 					this.isRefreshing = true
-
-					setTimeout(()=>{
-						this.isRefreshing=false
-					},2000)
+					setTimeout(function(){
+						that.dataList=[];
+						that.pageNo=1;
+						that.getListData();
+					},1000)
+					
 				}
 			},
 		
@@ -715,6 +882,10 @@
 				if (this.pageType == "outwarecheck") {
 					this.tkshow = true;
 					this.tkshow2 = true;
+				}
+				if (this.pageType == "alreadycheck") {
+					this.tkshow = true;
+					this.tkshow3 = true;
 				}
 			},
 			hideTk() {
@@ -786,7 +957,37 @@
 				}).catch(res => {
 				　　// 失败进行的操作
 				})
-			}
+			},
+			submitInWareCheck1(){
+				let billItem=this.selectBill;
+				let name=this.userList[this.arrIndex];
+				let data={
+
+					planid: billItem.id,
+					projectdepartment:billItem.projectdepartment,
+					projectdepartmentid:billItem.projectdepartmentid,
+					type:"入库检验"
+
+				}
+				console.log(data,'121')
+				
+				this.$api.submitInWareCheck(data).then(res => {
+					if(res.code==200){
+						this.hideTk();
+						this.arrIndex=0;
+						uni.showToast({
+							title: "操作成功",
+							duration: 2000
+						});
+						this.dataList=[];
+						this.pageNo=1;
+						this.getListData();
+					}
+					// 获得数据 
+				}).catch(res => {
+				　　// 失败进行的操作
+				})
+			},
 			
 		}
 	}
@@ -863,6 +1064,14 @@
 				height:447rpx;
 				background: url(@/static/kuang7.png) no-repeat center center;
 				background-size:726rpx 447rpx;
+			}
+			&.bg8{
+				height:517rpx;
+				background: url(@/static/kuang8.png) no-repeat center center;
+				background-size:726rpx 517rpx;
+				.item_botn{
+					margin-top: 35rpx;
+				}
 			}
 			.item_botn{
 				color:#016ba9;
@@ -950,6 +1159,10 @@
     image {
       width: 405rpx;
       height: 85rpx;
+	  &.imgg1{
+		  width:583rpx;
+		  height:89rpx;
+	  }
     }
   }
   .cont {
